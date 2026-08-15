@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jack -- 3D Creator</title>
+  
+  <!-- Google Fonts: Kanit (300-900) & Space Grotesk / Inter for GMT Brand accents -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Kanit:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            kanit: ['Kanit', 'sans-serif'],
+            grotesk: ['Space Grotesk', 'sans-serif'],
+            inter: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            darkBg: '#0C0C0C',
+            gmtBlack: '#0D0D0D',
+            gmtCrimson: '#DC2626',
+            gmtLight: '#D7E2EA',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- React & Dependencies CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+
+  <style>
+    /* Global Reset & Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    html, body, #root {
+      background-color: #0C0C0C;
+      color: #D7E2EA;
+      font-family: 'Kanit', sans-serif;
+      overflow-x: hidden;
+      width: 100%;
+      scroll-behavior: smooth;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0C0C0C;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1f2228;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #DC2626;
+    }
+
+    /* Hero Heading Gradient Text */
+    .hero-heading {
+      background: linear-gradient(180deg, #646973 0%, #BBCCD7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* GMT Crimson Gradient Text */
+    .gmt-crimson-gradient {
+      background: linear-gradient(180deg, #FFFFFF 0%, #DC2626 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Custom Noise Grain overlay for GMT Brand Aesthetic */
+    .bg-grain {
+      background-image: radial-gradient(rgba(220, 38, 38, 0.08) 1px, transparent 0);
+      background-size: 24px 24px;
+    }
+  </style>
+</head>
+<body class="bg-[#0C0C0C] text-[#D7E2EA] antialiased selection:bg-[#DC2626] selection:text-white">
+
+  <div id="root"></div>
+
+  <script type="text/javascript">
+    const { useState, useEffect, useRef, useMemo, createContext, useContext } = React;
+    const { motion, useScroll, useTransform, AnimatePresence } = window.Motion;
+
+    // --- Lucide Icons (Inline SVG Components for Standalone Compatibility) ---
+    const IconSparkles = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+      </svg>
+    );
+
+    const IconArrowUpRight = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5h7m0 0v7m0-7L7 19" />
+      </svg>
+    );
+
+    const IconLayers = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+      </svg>
+    );
+
+    const IconCpu = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M3 9h2m-2 6h2m14-6h2m-2 6h2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+      </svg>
+    );
+
+    // --- REUSABLE COMPONENTS ---
+
+    // 1. ContactButton Component
+    const ContactButton = ({ label = "Contact Me", onClick }) => {
+      return (
+        <button
+          onClick={onClick}
+          className="group relative inline-flex items-center justify-center overflow-hidden rounded-full font-kanit font-medium uppercase tracking-widest text-white transition-all duration-300 hover:scale-105 active:scale-95 px-8 py-3 sm:px-10 sm:py-3.5 md:px-12 md:py-4 text-xs sm:text-sm md:text-base cursor-pointer z-20"
+          style={{
+            background: 'linear-gradient(123deg, #18011F 7%, #B600A8 37%, #7621B0 72%, #BE4C00 100%)',
+            boxShadow: '0px 4px 4px rgba(181, 1, 167, 0.25), inset 4px 4px 12px #7721B1',
+            outline: '2px solid rgba(255, 255, 255, 0.8)',
+            outlineOffset: '-3px'
+          }}
+        >
+          <span className="relative z-10 flex items-center gap-2 drop-shadow-md">
+            {label}
+            <IconArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+          </span>
+          {/* GMT Crimson Accent Glow Layer */}
+          <div className="absolute inset-0 bg-gradient-to-r from-red-600/30 to-purple-600/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
+        </button>
+      );
+    };
+
+    // 2. LiveProjectButton Component
+    const LiveProjectButton = ({ label = "Live Project", href = "#" }) => {
+      return (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 rounded-full border-2 border-[#D7E2EA] px-6 py-2.5 sm:px-8 sm:py-3 text-xs sm:text-sm md:text-base font-kanit font-medium uppercase tracking-widest text-[#D7E2EA] transition-all duration-300 hover:bg-[#D7E2EA]/10 hover:border-white hover:text-white"
+        >
+          <span>{label}</span>
+          <IconArrowUpRight className="w-4 h-4" />
+        </a>
+      );
+    };
+
+    // 3. FadeIn Component
+    const FadeIn = ({ children, delay = 0, duration = 0.7, x = 0, y = 30, className = "" }) => {
+      return (
+        <motion.div
+          initial={{ opacity: 0, x, y }}
+          whileInView={{ opacity: 1, x: 0, y: 0 }}
+          viewport={{ once: true, margin: "50px" }}
+          transition={{
+            duration,
+            delay,
+            ease: [0.25, 0.1, 0.25, 1]
+          }}
+          className={className}
+        >
+          {children}
+        </motion.div>
+      );
+    };
+
+    // 4. Magnet Component
+    const Magnet = ({
+      children,
+      padding = 150,
+      strength = 3,
+      activeTransition = "transform 0.3s ease-out",
+      inactiveTransition = "transform 0.6s ease-in-out",
+      className = ""
+    }) => {
+      const ref = useRef(null);
+      const [position, setPosition] = useState({ x: 0, y: 0 });
+      const [isHovered, setIsHovered] = useState(false);
+
+      useEffect(() => {
+        const handleMouseMove = (e) => {
+          if (!ref.current) return;
+          const rect = ref.current.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+
+          const distanceX = e.clientX - centerX;
+          const distanceY = e.clientY - centerY;
+          const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+          if (distance < padding + rect.width / 2) {
+            setIsHovered(true);
+            setPosition({
+              x: distanceX / strength,
+              y: distanceY / strength
+            });
+          } else {
+            setIsHovered(false);
+            setPosition({ x: 0, y: 0 });
+          }
+        };
+
+        window.addEventListener('mousemove', handleMouseMove);
+        return () => window.removeEventListener('mousemove', handleMouseMove);
+      }, [padding, strength]);
+
+      return (
+        <div
+          ref={ref}
+          className={className}
+          style={{
+            transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
+            transition: isHovered ? activeTransition : inactiveTransition,
+            willChange: 'transform'
+          }}
+        >
+          {children}
+        </div>
+      );
+    };
+
+    // 5. AnimatedText Component (Scroll Reveal)
+    const AnimatedText = ({ text }) => {
+      const containerRef = useRef(null);
+      const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ['start 0.8', 'end 0.2']
+      });
+
+      const characters = useMemo(() => text.split(''), [text]);
+
+      return (
+        <p ref={containerRef} className="text-[#D7E2EA] font-kanit font-medium text-center leading-relaxed max-w-[560px] text-[clamp(1rem,2vw,1.35rem)] flex flex-wrap justify-center">
+          {characters.map((char, index) => {
+            const start = index / characters.length;
+            const end = start + (1 / characters.length);
+            // Character opacity maps strictly from 0.2 to 1 based on scroll position
+            const opacity = useTransform(scrollYProgress, [start, end], [0.2, 1]);
+
+            return (
+              <motion.span key={index} style={{ opacity }} className="relative inline-block">
+                {char === ' ' ? '\u00A0' : char}
+              </motion.span>
+            );
+          })}
+        </p>
+      );
+    };
+
+    // --- MAIN SECTIONS ---
+
+    // SECTION 1: HERO SECTION
+    const HeroSection = ({ onContactClick }) => {
+      return (
+        <section className="relative h-screen w-full flex flex-col justify-between overflow-x-clip bg-[#0C0C0C] bg-grain px-6 md:px-10 pb-7 sm:pb-8 md:pb-10 z-10">
+          
+          {/* Navbar */}
+          <FadeIn delay={0} y={-20} className="w-full pt-6 md:pt-8 z-30">
+            <nav className="flex justify-between items-center w-full max-w-7xl mx-auto">
+              {/* GMT Brand Identity Tag */}
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-[#DC2626] rounded-full animate-pulse" />
+                <span className="font-grotesk tracking-tighter text-xs md:text-sm text-[#D7E2EA] font-bold">GMT // STUDIO</span>
+              </div>
+
+              <div className="flex justify-between items-center gap-6 md:gap-12 text-[#D7E2EA] font-kanit font-medium uppercase tracking-wider text-sm md:text-lg lg:text-[1.4rem]">
+                <a href="#about" className="hover:opacity-70 transition-opacity duration-200 hover:text-[#DC2626]">About</a>
+                <a href="#services" className="hover:opacity-70 transition-opacity duration-200 hover:text-[#DC2626]">Price</a>
+                <a href="#projects" className="hover:opacity-70 transition-opacity duration-200 hover:text-[#DC2626]">Projects</a>
+                <a href="#about" onClick={onContactClick} className="hover:opacity-70 transition-opacity duration-200 hover:text-[#DC2626]">Contact</a>
+              </div>
+            </nav>
+          </FadeIn>
+
+          {/* Hero Heading Container */}
+          <div className="w-full overflow-hidden my-auto relative z-20">
+            <FadeIn delay={0.15} y={40}>
+              <h1 className="hero-heading font-kanit font-black uppercase tracking-tight leading-none whitespace-nowrap w-full text-center text-[14vw] sm:text-[15vw] md:text-[16vw] lg:text-[17.5vw] mt-6 sm:mt-4 md:-mt-5 select-none">
+                Hi, i&apos;m jack
+              </h1>
+            </FadeIn>
+          </div>
+
+          {/* Centered Magnetic Hero Portrait */}
+          <FadeIn delay={0.6} y={30} className="absolute left-1/2 -translate-x-1/2 z-10 top-1/2 -translate-y-1/2 sm:top-auto sm:translate-y-0 sm:bottom-0 pointer-events-none sm:pointer-events-auto">
+            <Magnet padding={150} strength={3}>
+              <div className="relative group">
+                <img
+                  src="https://shrug-person-78902957.figma.site/_components/v2/d24c01ad3a56fc65e942a1f501eb73db42d7cf9a/Rectangle_40443.81459862.png"
+                  alt="Jack - 3D Creator Portrait"
+                  className="w-[280px] sm:w-[360px] md:w-[440px] lg:w-[520px] object-contain drop-shadow-[0_20px_50px_rgba(220,38,38,0.2)] transition-transform duration-500 group-hover:scale-105"
+                  loading="eager"
+                />
+                {/* GMT Visual Accent Ring */}
+                <div className="absolute inset-0 border border-[#DC2626]/20 rounded-full scale-110 pointer-events-none animate-ping opacity-25" />
+              </div>
+            </Magnet>
+          </FadeIn>
+
+          {/* Bottom Bar Layout */}
+          <div className="w-full max-w-7xl mx-auto flex justify-between items-end z-20">
+            <FadeIn delay={0.35} y={20}>
+              <p className="text-[#D7E2EA] font-kanit font-light uppercase tracking-wide leading-snug text-[clamp(0.75rem,1.4vw,1.5rem)] max-w-[160px] sm:max-w-[220px] md:max-w-[260px]">
+                a 3d creator driven by crafting striking and unforgettable projects
+              </p>
+            </FadeIn>
+
+            <FadeIn delay={0.5} y={20}>
+              <ContactButton label="Contact Me" onClick={onContactClick} />
+            </FadeIn>
+          </div>
+        </section>
+      );
+    };
+
+    // SECTION 2: MARQUEE SECTION
+    const MarqueeSection = () => {
+      const [scrollOffset, setScrollOffset] = useState(0);
+      const sectionRef = useRef(null);
+
+      const gifUrls = [
+        "https://motionsites.ai/assets/hero-space-voyage-preview-eECLH3Yc.gif",
+        "https://motionsites.ai/assets/hero-codenest-preview-Cgppc2qV.gif",
+        "https://motionsites.ai/assets/hero-vex-ventures-preview-BczMFIiw.gif",
+        "https://motionsites.ai/assets/hero-stellar-ai-v2-preview-DjvxjG3C.gif",
+        "https://motionsites.ai/assets/hero-asme-preview-B_nGDnTP.gif",
+        "https://motionsites.ai/assets/hero-transform-data-preview-Cx5OU29N.gif",
+        "https://motionsites.ai/assets/hero-vitara-preview-Cjz2QYyU.gif",
+        "https://motionsites.ai/assets/hero-terra-preview-BFjrCr7T.gif",
+        "https://motionsites.ai/assets/hero-skyelite-preview-DHaZIgUv.gif",
+        "https://motionsites.ai/assets/hero-aethera-preview-DknSlcTa.gif",
+        "https://motionsites.ai/assets/hero-designpro-preview-D8c5_een.gif",
+        "https://motionsites.ai/assets/hero-stellar-ai-preview-D3HL6bw1.gif",
+        "https://motionsites.ai/assets/hero-xportfolio-preview-D4A8maiC.gif",
+        "https://motionsites.ai/assets/hero-orbit-web3-preview-BXt4OttD.gif",
+        "https://motionsites.ai/assets/hero-nexora-preview-cx5HmUgo.gif",
+        "https://motionsites.ai/assets/hero-evr-ventures-preview-DZxeVFEX.gif",
+        "https://motionsites.ai/assets/hero-planet-orbit-preview-DWAP8Z1P.gif",
+        "https://motionsites.ai/assets/hero-new-era-preview-CocuDUm9.gif",
+        "https://motionsites.ai/assets/hero-wealth-preview-B70idl_u.gif",
+        "https://motionsites.ai/assets/hero-luminex-preview-CxOP7ce6.gif",
+        "https://motionsites.ai/assets/hero-celestia-preview-0yO3jXO8.gif"
+      ];
+
+      const row1Gifs = useMemo(() => {
+        const row1 = gifUrls.slice(0, 11);
+        return [...row1, ...row1, ...row1]; // Tripled for continuous scroll
+      }, []);
+
+      const row2Gifs = useMemo(() => {
+        const row2 = gifUrls.slice(11);
+        return [...row2, ...row2, ...row2]; // Tripled for continuous scroll
+      }, []);
+
+      useEffect(() => {
+        const handleScroll = () => {
+          if (!sectionRef.current) return;
+          const rect = sectionRef.current.getBoundingClientRect();
+          const sectionTop = rect.top + window.scrollY;
+          const calculated = (window.scrollY - sectionTop + window.innerHeight) * 0.3;
+          setScrollOffset(calculated);
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+      }, []);
+
+      return (
+        <section ref={sectionRef} className="bg-[#0C0C0C] pt-24 sm:pt-32 md:pt-40 pb-10 overflow-hidden relative z-10">
+          <div className="flex flex-col gap-3">
+            
+            {/* Row 1: Moves RIGHT on scroll */}
+            <div
+              className="flex gap-3 w-max"
+              style={{
+                transform: `translateX(${scrollOffset - 200}px)`,
+                willChange: 'transform'
+              }}
+            >
+              {row1Gifs.map((url, i) => (
+                <div key={`row1-${i}`} className="w-[280px] sm:w-[360px] md:w-[420px] h-[180px] sm:h-[230px] md:h-[270px] flex-shrink-0 rounded-2xl overflow-hidden bg-[#15171C] border border-white/5 shadow-2xl group relative">
+                  <img src={url} alt={`3D Motion Preview ${i}`} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
+              ))}
+            </div>
+
+            {/* Row 2: Moves LEFT on scroll */}
+            <div
+              className="flex gap-3 w-max"
+              style={{
+                transform: `translateX(${-(scrollOffset - 200)}px)`,
+                willChange: 'transform'
+              }}
+            >
+              {row2Gifs.map((url, i) => (
+                <div key={`row2-${i}`} className="w-[280px] sm:w-[360px] md:w-[420px] h-[180px] sm:h-[230px] md:h-[270px] flex-shrink-0 rounded-2xl overflow-hidden bg-[#15171C] border border-white/5 shadow-2xl group relative">
+                  <img src={url} alt={`3D Motion Preview ${i}`} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
+              ))}
+            </div>
+
+          </div>
+        </section>
+      );
+    };
+
+    // SECTION 3: ABOUT SECTION
+    const AboutSection = ({ onContactClick }) => {
+      const bioText = "With more than five years of experience in design, i focus on branding, web design, and user experience, i truly enjoy working with businesses that aim to stand out and present their best image. Let's build something incredible together!";
+
+      return (
+        <section id="about" className="relative min-h-screen w-full bg-[#0C0C0C] bg-grain flex flex-col justify-center items-center px-5 sm:px-8 md:px-10 py-20 overflow-hidden z-10">
+          
+          {/* Decorative Corner 3D Assets */}
+          {/* Top-Left: Moon Icon */}
+          <FadeIn delay={0.1} x={-80} y={0} duration={0.9} className="absolute top-[4%] left-[1%] sm:left-[2%] md:left-[4%] z-0 pointer-events-none">
+            <img
+              src="https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/moon_icon.11395d36.png"
+              alt="3D Moon Asset"
+              className="w-[120px] sm:w-[160px] md:w-[210px] object-contain drop-shadow-[0_10px_30px_rgba(220,38,38,0.15)] animate-bounce"
+              style={{ animationDuration: '6s' }}
+            />
+          </FadeIn>
+
+          {/* Bottom-Left: 3D Object */}
+          <FadeIn delay={0.25} x={-80} y={0} duration={0.9} className="absolute bottom-[8%] left-[3%] sm:left-[6%] md:left-[10%] z-0 pointer-events-none">
+            <img
+              src="https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/p59_1.4659672e.png"
+              alt="3D Geometric Element"
+              className="w-[100px] sm:w-[140px] md:w-[180px] object-contain drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)]"
+            />
+          </FadeIn>
+
+          {/* Top-Right: Lego Icon */}
+          <FadeIn delay={0.15} x={80} y={0} duration={0.9} className="absolute top-[4%] right-[1%] sm:right-[2%] md:right-[4%] z-0 pointer-events-none">
+            <img
+              src="https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/lego_icon-1.703bb594.png"
+              alt="3D Lego Block"
+              className="w-[120px] sm:w-[160px] md:w-[210px] object-contain drop-shadow-[0_10px_30px_rgba(220,38,38,0.2)] animate-pulse"
+            />
+          </FadeIn>
+
+          {/* Bottom-Right: 3D Group */}
+          <FadeIn delay={0.3} x={80} y={0} duration={0.9} className="absolute bottom-[8%] right-[3%] sm:right-[6%] md:right-[10%] z-0 pointer-events-none">
+            <img
+              src="https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/Group_134-1.2e04f3ce.png"
+              alt="3D Visual Group"
+              className="w-[130px] sm:w-[170px] md:w-[220px] object-contain drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)]"
+            />
+          </FadeIn>
+
+          {/* Center Column Container */}
+          <div className="flex flex-col items-center justify-center max-w-4xl z-10 w-full text-center">
+            
+            {/* Heading */}
+            <FadeIn delay={0} y={40} className="mb-10 sm:mb-14 md:mb-16">
+              <h2 className="hero-heading font-kanit font-black uppercase tracking-tight leading-none text-[clamp(3rem,12vw,160px)]">
+                About me
+              </h2>
+            </FadeIn>
+
+            {/* Character-by-character animated scroll reveal paragraph */}
+            <div className="mb-16 sm:mb-20 md:mb-24 flex justify-center w-full">
+              <AnimatedText text={bioText} />
+            </div>
+
+            {/* Contact Button */}
+            <FadeIn delay={0.2} y={20}>
+              <ContactButton label="Contact Me" onClick={onContactClick} />
+            </FadeIn>
+
+          </div>
+        </section>
+      );
+    };
+
+    // SECTION 4: SERVICES SECTION
+    const ServicesSection = () => {
+      const services = [
+        {
+          num: "01",
+          title: "3D Modeling",
+          desc: "Creation of detailed objects, characters, or environments tailored to specific client needs, ideal for games, products, and visualizations."
+        },
+        {
+          num: "02",
+          title: "Rendering",
+          desc: "High-quality, photorealistic renders that showcase designs with custom lighting, textures, and materials to bring concepts to life."
+        },
+        {
+          num: "03",
+          title: "Motion Design",
+          desc: "Dynamic animations and motion graphics that add energy and storytelling to brands, products, and digital experiences."
+        },
+        {
+          num: "04",
+          title: "Branding",
+          desc: "Crafting cohesive visual identities -- from logos to full brand systems -- that communicate a clear and memorable presence."
+        },
+        {
+          num: "05",
+          title: "Web Design",
+          desc: "Designing clean, modern, and conversion-focused websites with attention to layout, typography, and user experience."
+        }
+      ];
+
+      return (
+        <section id="services" className="bg-white text-[#0C0C0C] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32 relative z-20 shadow-2xl">
+          <div className="max-w-5xl mx-auto">
+            
+            {/* Services Heading */}
+            <h2 className="font-kanit font-black uppercase text-center text-[clamp(3rem,12vw,160px)] leading-none mb-16 sm:mb-20 md:mb-28 text-[#0C0C0C] tracking-tight">
+              Services
+            </h2>
+
+            {/* Services List */}
+            <div className="flex flex-col">
+              {services.map((item, i) => (
+                <FadeIn key={item.num} delay={i * 0.1} y={20}>
+                  <div className="flex flex-col md:flex-row md:items-center justify-between py-8 sm:py-10 md:py-12 border-b border-[#0C0C0C]/15 transition-all duration-300 hover:pl-2 group">
+                    
+                    {/* Number Left */}
+                    <div className="font-kanit font-black text-[clamp(3rem,10vw,140px)] text-[#0C0C0C] leading-none mb-4 md:mb-0 md:w-1/3 group-hover:text-[#DC2626] transition-colors duration-300">
+                      {item.num}
+                    </div>
+
+                    {/* Content Right Stacked */}
+                    <div className="flex flex-col md:w-2/3">
+                      <h3 className="font-kanit font-medium uppercase text-[clamp(1rem,2.2vw,2.1rem)] text-[#0C0C0C] mb-2 tracking-wide">
+                        {item.title}
+                      </h3>
+                      <p className="font-kanit font-light text-[clamp(0.85rem,1.6vw,1.25rem)] text-[#0C0C0C]/60 leading-relaxed max-w-2xl">
+                        {item.desc}
+                      </p>
+                    </div>
+
+                  </div>
+                </FadeIn>
+              ))}
+            </div>
+
+          </div>
+        </section>
+      );
+    };
+
+    // SECTION 5: PROJECTS SECTION (Sticky Stacking Cards)
+    const ProjectsSection = () => {
+      const projects = [
+        {
+          num: "01",
+          name: "Nextlevel Studio",
+          category: "Client",
+          col1Image1: "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055344_5eff02e0-87a5-41ce-b64f-eb08da8f33db.png&w=1280&q=85",
+          col1Image2: "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055431_11d841fd-8b41-46a5-82e4-b04f2407a7d8.png&w=1280&q=85",
+          col2Image: "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055451_e317bf2d-28d4-48cc-86b0-6f72f25b6327.png&w=1280&q=85"
+        },
+        {
+          num: "02",
+          name: "Aura Brand Identity",
+          category: "Personal",
+          col1Image1: "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055654_911201c5-36d9-4bc6-bac7-331adfce159f.png&w=1280&q=85",
+          col1Image2: "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055723_5ceda0b8-d9c2-4665-b2e3-83ba19ba76d1.png&w=1280&q=85",
+          col2Image: "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055753_adc5dcbd-a8e6-49c0-b43a-9b030d835cea.png&w=1280&q=85"
+        },
+        {
+          num: "03",
+          name: "Solaris Digital",
+          category: "Client",
+          col1Image1: "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055759_963cfb0b-4bd1-4b0f-9d0a-09bd6cf95b2f.png&w=1280&q=85",
+          col1Image2: "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_060108_438f781a-9846-4dcc-89ab-c4e6cb830f5b.png&w=1280&q=85",
+          col2Image: "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055818_9d062121-ad7e-46b9-999a-1a6a692ef1ee.png&w=1280&q=85"
+        }
+      ];
+
+      return (
+        <section id="projects" className="bg-[#0C0C0C] bg-grain rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 px-5 sm:px-8 md:px-10 py-20 relative z-30 min-h-screen">
+          <div className="max-w-6xl mx-auto">
+            
+            {/* Singular Project Heading */}
+            <h2 className="hero-heading font-kanit font-black uppercase text-center text-[clamp(3rem,12vw,160px)] leading-none mb-16 sm:mb-20 md:mb-24 tracking-tight">
+              Project
+            </h2>
+
+            {/* Stacking Cards List */}
+            <div className="flex flex-col gap-12 pb-32">
+              {projects.map((proj, idx) => {
+                const totalCards = projects.length;
+                const targetScale = 1 - (totalCards - 1 - idx) * 0.03;
+
+                return (
+                  <div
+                    key={proj.num}
+                    className="sticky top-24 md:top-32 h-[85vh] w-full"
+                    style={{ top: `${96 + idx * 28}px` }}
+                  >
+                    <div
+                      className="w-full h-full rounded-[40px] sm:rounded-[50px] md:rounded-[60px] border-2 border-[#D7E2EA] bg-[#0C0C0C] p-4 sm:p-6 md:p-8 flex flex-col justify-between shadow-2xl transition-transform duration-300 overflow-hidden"
+                      style={{
+                        transform: `scale(${targetScale})`,
+                        transformOrigin: 'top center'
+                      }}
+                    >
+                      {/* Top Header Row */}
+                      <div className="flex items-center justify-between border-b border-[#D7E2EA]/20 pb-4 mb-4">
+                        <div className="flex items-center gap-4 sm:gap-8">
+                          <span className="font-kanit font-black text-3xl sm:text-5xl md:text-6xl text-[#D7E2EA]">
+                            {proj.num}
+                          </span>
+                          <div>
+                            <span className="text-xs sm:text-sm font-grotesk text-[#DC2626] font-bold uppercase tracking-widest block">
+                              {proj.category}
+                            </span>
+                            <h3 className="font-kanit font-medium text-lg sm:text-2xl md:text-3xl text-white uppercase tracking-wide">
+                              {proj.name}
+                            </h3>
+                          </div>
+                        </div>
+
+                        <LiveProjectButton label="Live Project" />
+                      </div>
+
+                      {/* Bottom Grid Layout: Left 40%, Right 60% */}
+                      <div className="grid grid-cols-1 md:grid-cols-12 gap-4 h-full overflow-hidden">
+                        
+                        {/* Left Column (40%) - 2 Stacked Images */}
+                        <div className="md:col-span-5 flex flex-col gap-4 h-full">
+                          <div className="overflow-hidden rounded-[24px] sm:rounded-[36px] border border-white/10 h-[clamp(130px,16vw,230px)]">
+                            <img
+                              src={proj.col1Image1}
+                              alt={`${proj.name} render 1`}
+                              className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                              loading="lazy"
+                            />
+                          </div>
+                          <div className="overflow-hidden rounded-[24px] sm:rounded-[36px] border border-white/10 h-[clamp(160px,22vw,340px)] flex-grow">
+                            <img
+                              src={proj.col1Image2}
+                              alt={`${proj.name} render 2`}
+                              className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                              loading="lazy"
+                            />
+                          </div>
+                        </div>
+
+                        {/* Right Column (60%) - 1 Tall Image */}
+                        <div className="md:col-span-7 h-full overflow-hidden rounded-[24px] sm:rounded-[36px] border border-white/10">
+                          <img
+                            src={proj.col2Image}
+                            alt={`${proj.name} main feature render`}
+                            className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                            loading="lazy"
+                          />
+                        </div>
+
+                      </div>
+
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+          </div>
+        </section>
+      );
+    };
+
+    // FOOTER SECTION WITH GMT BRANDING
+    const Footer = ({ onContactClick }) => {
+      return (
+        <footer className="bg-[#0C0C0C] border-t border-white/10 px-6 py-12 md:py-16 relative z-40">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <div className="flex flex-col items-center md:items-start gap-2">
+              <span className="font-grotesk font-bold text-2xl text-white tracking-tighter">
+                JACK <span className="text-[#DC2626]">//</span> GMT
+              </span>
+              <p className="text-xs text-[#D7E2EA]/60 uppercase tracking-widest font-kanit">
+                3D Creator & Visual Designer &copy; 2026. All rights reserved.
+              </p>
+            </div>
+
+            <div className="flex gap-6 text-sm uppercase tracking-wider font-kanit">
+              <a href="#about" className="text-[#D7E2EA] hover:text-[#DC2626] transition-colors">About</a>
+              <a href="#services" className="text-[#D7E2EA] hover:text-[#DC2626] transition-colors">Services</a>
+              <a href="#projects" className="text-[#D7E2EA] hover:text-[#DC2626] transition-colors">Projects</a>
+            </div>
+
+            <ContactButton label="Let's Talk" onClick={onContactClick} />
+          </div>
+        </footer>
+      );
+    };
+
+    // --- APP CONTAINER & MODAL DIALOG ---
+    const App = () => {
+      const [isModalOpen, setIsModalOpen] = useState(false);
+
+      const handleContactClick = () => {
+        setIsModalOpen(true);
+      };
+
+      return (
+        <div className="min-h-screen bg-[#0C0C0C] text-[#D7E2EA] font-kanit overflow-x-clip relative">
+          
+          <HeroSection onContactClick={handleContactClick} />
+          <MarqueeSection />
+          <AboutSection onContactClick={handleContactClick} />
+          <ServicesSection />
+          <ProjectsSection />
+          <Footer onContactClick={handleContactClick} />
+
+          {/* Contact Modal Dialog */}
+          <AnimatePresence>
+            {isModalOpen && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
+                onClick={() => setIsModalOpen(false)}
+              >
+                <motion.div
+                  initial={{ scale: 0.9, y: 20 }}
+                  animate={{ scale: 1, y: 0 }}
+                  exit={{ scale: 0.9, y: 20 }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="bg-[#121418] border border-[#DC2626]/30 rounded-3xl p-8 max-w-lg w-full shadow-2xl relative"
+                >
+                  <button
+                    onClick={() => setIsModalOpen(false)}
+                    className="absolute top-6 right-6 text-white/60 hover:text-white text-xl font-bold"
+                  >
+                    ✕
+                  </button>
+
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="w-2.5 h-2.5 bg-[#DC2626] rounded-full animate-ping" />
+                    <span className="font-grotesk text-xs uppercase tracking-widest text-[#DC2626] font-bold">GMT Connect</span>
+                  </div>
+
+                  <h3 className="text-3xl font-kanit font-black uppercase text-white mb-2 tracking-tight">
+                    Start a Project
+                  </h3>
+                  <p className="text-sm text-[#D7E2EA]/70 mb-6 font-light">
+                    Looking for custom 3D modeling, rendering, or brand identity? Send a message and let's craft something unforgettable.
+                  </p>
+
+                  <form onSubmit={(e) => { e.preventDefault(); alert('Message sent!'); setIsModalOpen(false); }} className="space-y-4">
+                    <div>
+                      <input
+                        type="text"
+                        placeholder="Your Name"
+                        required
+                        className="w-full bg-[#1A1D24] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/40 focus:outline-none focus:border-[#DC2626] text-sm"
+                      />
+                    </div>
+                    <div>
+                      <input
+                        type="email"
+                        placeholder="Your Email"
+                        required
+                        className="w-full bg-[#1A1D24] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/40 focus:outline-none focus:border-[#DC2626] text-sm"
+                      />
+                    </div>
+                    <div>
+                      <textarea
+                        rows="4"
+                        placeholder="Project Details..."
+                        required
+                        className="w-full bg-[#1A1D24] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/40 focus:outline-none focus:border-[#DC2626] text-sm resize-none"
+                      ></textarea>
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="w-full py-4 bg-[#DC2626] hover:bg-red-700 text-white font-kanit font-bold uppercase tracking-wider rounded-xl transition-colors text-sm shadow-lg shadow-red-900/30"
+                    >
+                      Send Message
+                    </button>
+                  </form>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+        </div>
+      );
+    };
+
+    // Render React App
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>

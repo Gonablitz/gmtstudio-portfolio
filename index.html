@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jack -- 3D Creator</title>
+</head>
+<body>
+  <!-- This is a copy of main.html for use as the site entrypoint. -->
+  <!-- The original file is `main.html`. Open `index.html` to serve the site. -->
+  <script>
+    // Load the main file content by fetching `main.html` and injecting it.
+    (async () => {
+      try {
+        const resp = await fetch('./main.html');
+        if (!resp.ok) throw new Error('Failed to load main.html');
+        const html = await resp.text();
+        document.open();
+        document.write(html);
+        document.close();
+      } catch (e) {
+        document.body.innerHTML = '<h2>Unable to load site. Open main.html directly in the browser.</h2>';
+      }
+    })();
+  </script>
+</body>
+</html>
