@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GMT Studio — Full Stack & Architectural Portfolio</title>
+  <title>Timothy Gona — Full-Stack, AI & Data Engineering Specialist</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,8 +23,8 @@
           },
           colors: {
             crimson: '#DC2626',
-            darkBg: '#0C0C0C',
-            surfaceText: '#D7E2EA',
+            paper: '#FAFAFA',
+            ink: '#141414',
           }
         }
       }
@@ -38,31 +38,37 @@
   <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
 
   <style>
-    /* Custom CSS Overrides */
     body {
-      background-color: #0C0C0C;
-      color: #D7E2EA;
+      background-color: #FAFAFA;
+      color: #141414;
       font-family: 'Inter', sans-serif;
       overflow-x: hidden;
     }
     .gmt-crimson-gradient {
-      background: linear-gradient(135deg, #FFFFFF 0%, #DC2626 100%);
+      background: linear-gradient(135deg, #141414 0%, #DC2626 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
     .bg-grain {
-      background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0);
+      background-image: radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 0);
       background-size: 24px 24px;
+    }
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .animate-marquee {
+      animation: marquee 22s linear infinite;
     }
   </style>
 </head>
-<body class="bg-[#0C0C0C] text-[#D7E2EA] antialiased selection:bg-[#DC2626] selection:text-white">
+<body class="bg-[#FAFAFA] text-[#141414] antialiased selection:bg-[#DC2626] selection:text-white">
 
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useRef, useState, useEffect } = React;
-    const { motion, useScroll, useTransform, useInView } = window.Motion;
+    const { useRef } = React;
+    const { motion, useInView } = window.Motion;
 
     // Helper Component: Animated Fade In
     const FadeIn = ({ children, delay = 0, y = 20, className = "" }) => {
@@ -82,58 +88,95 @@
       );
     };
 
-    // SECTION 1: HERO SECTION
-    const HeroSection = ({ onContactClick }) => {
+    // HERO SECTION
+    const HeroSection = () => {
       return (
-        <section className="relative min-h-screen flex flex-col justify-between px-6 md:px-12 pt-12 pb-8 bg-[#0C0C0C] bg-grain border-b border-white/10 overflow-hidden">
-          {/* Header Bar */}
-          <header className="flex justify-between items-center z-20">
-            <div className="font-grotesk font-bold text-2xl tracking-tighter text-white">
-              GMT<span className="text-[#DC2626]">.</span>
+        <section className="relative min-h-screen flex flex-col justify-between px-6 md:px-12 pt-12 pb-8 bg-[#FAFAFA] bg-grain border-b border-black/10 overflow-hidden">
+          <header className="flex flex-wrap justify-between items-center gap-4 z-20">
+            <div className="font-grotesk font-bold text-2xl tracking-tighter text-[#141414]">
+              [GMT] <span className="text-[#DC2626]">.</span>
             </div>
-            <button
-              onClick={onContactClick}
-              className="font-grotesk text-xs uppercase tracking-widest px-5 py-2.5 rounded-full border border-white/20 hover:border-[#DC2626] hover:bg-[#DC2626] hover:text-white transition-all duration-300"
-            >
-              Get In Touch
-            </button>
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+              <a
+                href="https://github.com/Gonablitz"
+                target="_blank"
+                rel="noreferrer"
+                className="font-grotesk text-xs uppercase tracking-widest px-3.5 py-2 rounded-full border border-black/15 hover:border-[#DC2626] hover:bg-[#DC2626] hover:text-white transition-all duration-300"
+              >
+                GitHub
+              </a>
+              <a
+                href="https://www.linkedin.com/in/timothy-gona/"
+                target="_blank"
+                rel="noreferrer"
+                className="font-grotesk text-xs uppercase tracking-widest px-3.5 py-2 rounded-full border border-black/15 hover:border-[#DC2626] hover:bg-[#DC2626] hover:text-white transition-all duration-300"
+              >
+                LinkedIn
+              </a>
+              <a
+                href="./Timothy_Gona_CV.pdf"
+                target="_blank"
+                rel="noreferrer"
+                className="font-grotesk text-xs uppercase tracking-widest px-3.5 py-2 rounded-full border border-black/15 hover:border-[#DC2626] hover:bg-[#DC2626] hover:text-white transition-all duration-300"
+              >
+                CV
+              </a>
+              <a
+                href="https://cal.com/timothy-gona"
+                target="_blank"
+                rel="noreferrer"
+                className="font-grotesk text-xs uppercase tracking-widest px-3.5 py-2 rounded-full bg-[#141414] text-white hover:bg-[#DC2626] transition-all duration-300"
+              >
+                Book Call
+              </a>
+            </div>
           </header>
 
-          {/* Center Title Content */}
+          <FadeIn delay={0.05} className="z-20 mt-8">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 font-grotesk text-[11px] uppercase tracking-wider text-[#141414]/60">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#DC262650] bg-[#DC26260A] text-[#141414]">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#DC2626] animate-pulse"></span>
+                Oracle Vector Search Certified
+              </span>
+              <span className="text-black/20">/</span>
+              <span className="px-3 py-1.5 rounded-full border border-black/10">DataTalks Data Engineering</span>
+              <span className="px-3 py-1.5 rounded-full border border-black/10">PLP Software Dev</span>
+            </div>
+          </FadeIn>
+
           <div className="my-auto py-16 z-20 max-w-6xl">
             <FadeIn delay={0.1}>
               <p className="font-grotesk uppercase tracking-widest text-xs sm:text-sm text-[#DC2626] mb-4 font-bold">
-                Software Engineering & System Architecture
+                Timothy Gona — Software Engineer
               </p>
             </FadeIn>
             
             <FadeIn delay={0.2}>
-              <h1 className="font-kanit font-black uppercase text-[clamp(2.8rem,9vw,110px)] leading-[0.9] tracking-tight mb-8">
-                Building <br />
-                <span className="gmt-crimson-gradient">Scalable Digital</span> <br />
-                Infrastructure.
+              <h1 className="font-kanit font-black uppercase text-[clamp(2.8rem,8vw,100px)] leading-[0.9] tracking-tight mb-8 text-[#141414]">
+                Full-Stack, <br />
+                <span className="gmt-crimson-gradient">AI & Data Engineering</span> <br />
+                Specialist.
               </h1>
             </FadeIn>
 
-            <FadeIn delay={0.3} className="max-w-xl">
-              <p className="font-inter text-sm sm:text-base text-[#D7E2EA]/80 font-light leading-relaxed">
-                Focused on high-performance web applications, intelligent backend architectures, data pipelines, and sleek frontend systems.
+            <FadeIn delay={0.3} className="max-w-2xl">
+              <p className="font-inter text-sm sm:text-base text-[#141414]/70 font-light leading-relaxed">
+                Specializing in Retrieval-Augmented Generation (RAG), vector databases, cloud data infrastructure, and scalable full-stack web applications.
               </p>
             </FadeIn>
           </div>
 
-          {/* Bottom Bar Info */}
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 z-20 border-t border-white/10 pt-6 font-grotesk text-xs tracking-wider text-[#D7E2EA]/60 uppercase">
-            <div>Available for Engineering Roles & Projects</div>
-            <div>Based in Nairobi, Kenya</div>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 z-20 border-t border-black/10 pt-6 font-grotesk text-xs tracking-wider text-[#141414]/50 uppercase">
+            <div>B.Sc. Software Engineering — Kirinyaga University ('28)</div>
+            <div>Nairobi, Kenya • +254 708 443 570</div>
           </div>
         </section>
       );
     };
 
-    // SECTION 2: MARQUEE SECTION
+    // MARQUEE
     const MarqueeSection = () => {
-      const items = ["REACT", "PYTHON", "SQL", "VECTOR SEARCH", "DUCKDB", "TAILWIND CSS", "NODE.JS", "SYSTEM ARCHITECTURE"];
+      const items = ["ORACLE VECTOR SEARCH", "RAG PIPELINES", "TERRAFORM", "DOCKER", "BIGQUERY", "JAVASCRIPT", "PYTHON", "DBT", "POSTGRESQL", "KAFKA"];
       return (
         <div className="py-6 bg-[#DC2626] text-white font-grotesk font-bold tracking-widest text-sm uppercase overflow-hidden whitespace-nowrap">
           <div className="inline-flex gap-8 animate-marquee">
@@ -148,80 +191,42 @@
       );
     };
 
-    // SECTION 3: ABOUT SECTION
-    const AboutSection = ({ onContactClick }) => {
-      return (
-        <section className="px-6 md:px-12 py-24 bg-[#0C0C0C] border-b border-white/10">
-          <div className="max-w-7xl mx-auto grid md:grid-cols-12 gap-12 items-center">
-            <div className="md:col-span-5">
-              <FadeIn>
-                <span className="font-grotesk text-xs uppercase tracking-widest text-[#DC2626] font-bold">About GMT Studio</span>
-                <h2 className="font-kanit font-black uppercase text-4xl sm:text-5xl mt-2 mb-6 leading-tight">
-                  Engineering Precision Meets Aesthetic Cleanliness.
-                </h2>
-              </FadeIn>
-            </div>
-            <div className="md:col-span-7 font-inter font-light text-[#D7E2EA]/80 space-y-6 text-base leading-relaxed">
-              <FadeIn delay={0.1}>
-                <p>
-                  I specialize in turning complex software problems into minimal, high-efficiency digital products. With hands-on experience in cloud infrastructure, custom machine learning applications, and full-stack development, every system is crafted with strict performance standards.
-                </p>
-              </FadeIn>
-              <FadeIn delay={0.2}>
-                <p>
-                  By utilizing modern reactive design frameworks and robust database setups, I construct clean digital spaces that deliver both raw compute power and smooth user experiences.
-                </p>
-              </FadeIn>
-              <FadeIn delay={0.3}>
-                <button
-                  onClick={onContactClick}
-                  className="font-grotesk text-xs uppercase tracking-widest text-white border-b-2 border-[#DC2626] pb-1 hover:text-[#DC2626] transition-colors"
-                >
-                  Learn More About Work & Services →
-                </button>
-              </FadeIn>
-            </div>
-          </div>
-        </section>
-      );
-    };
-
-    // SECTION 4: SERVICES SECTION
-    const ServicesSection = () => {
-      const services = [
+    // ABOUT & STRENGTHS SECTION
+    const AboutSection = () => {
+      const strengths = [
         {
-          num: "01",
-          title: "Full-Stack Web Engineering",
-          desc: "End-to-end frontend and backend development with modern frameworks, focusing on modularity, security, and lightning-fast client interfaces."
+          title: "End-to-End Infrastructure",
+          desc: "Expertly navigating full engineering lifecycles using Terraform (IaC), Docker, GCP, and modern web application frontends."
         },
         {
-          num: "02",
-          title: "Data Pipelines & Storage",
-          desc: "Constructing analytics pipelines, vector indexing solutions, and lightweight embedded databases designed for real-time querying."
+          title: "AI & Vector Database Integration",
+          desc: "Specialist in enhancing LLM reliability through custom RAG pipelines and high-performance vector search indexes."
         },
         {
-          num: "03",
-          title: "UI Architecture & Design Systems",
-          desc: "High-contrast visual design systems, scalable component libraries, and stark minimalist aesthetics tailored for digital tools."
+          title: "Data Pipeline Architecture",
+          desc: "Proficient in workflow orchestration (Mage, Airflow), stream processing (Kafka), and analytics modeling (dbt, BigQuery)."
+        },
+        {
+          title: "Visual Design & UX",
+          desc: "Combining technical systems backend with graphic design capabilities (Adobe Creative Suite) for user interfaces."
         }
       ];
 
       return (
-        <section className="px-6 md:px-12 py-24 bg-[#0C0C0C] bg-grain border-b border-white/10">
+        <section className="px-6 md:px-12 py-24 bg-[#FAFAFA] border-b border-black/10">
           <div className="max-w-7xl mx-auto">
             <FadeIn>
-              <span className="font-grotesk text-xs uppercase tracking-widest text-[#DC2626] font-bold">Capabilities</span>
-              <h2 className="font-kanit font-black uppercase text-4xl sm:text-5xl mt-2 mb-16">Core Services</h2>
+              <span className="font-grotesk text-xs uppercase tracking-widest text-[#DC2626] font-bold">Summary</span>
+              <h2 className="font-kanit font-black uppercase text-3xl sm:text-5xl mt-2 mb-12 text-[#141414]">Architectural Strengths</h2>
             </FadeIn>
 
-            <div className="grid md:grid-cols-3 gap-8">
-              {services.map((srv, idx) => (
-                <FadeIn key={idx} delay={idx * 0.15}>
-                  <div className="p-8 border border-white/10 rounded-2xl bg-white/[0.02] hover:border-[#DC2626]/50 transition-colors h-full flex flex-col justify-between">
+            <div className="grid md:grid-cols-2 gap-8">
+              {strengths.map((item, idx) => (
+                <FadeIn key={idx} delay={idx * 0.1}>
+                  <div className="p-8 border border-black/10 rounded-2xl bg-white h-full flex flex-col justify-between hover:border-[#DC2626]/50 transition-all">
                     <div>
-                      <span className="font-grotesk text-2xl font-bold text-[#DC2626]">{srv.num}</span>
-                      <h3 className="font-grotesk text-xl font-bold text-white mt-4 mb-3">{srv.title}</h3>
-                      <p className="font-inter text-sm text-[#D7E2EA]/70 leading-relaxed font-light">{srv.desc}</p>
+                      <h3 className="font-grotesk text-xl font-bold text-[#141414] mb-3">{item.title}</h3>
+                      <p className="font-inter text-sm text-[#141414]/70 leading-relaxed font-light">{item.desc}</p>
                     </div>
                   </div>
                 </FadeIn>
@@ -232,106 +237,220 @@
       );
     };
 
-    // SECTION 5: PROJECTS SECTION
-    const ProjectsSection = () => {
-      const projects = [
+    // TECHNICAL SKILLS MATRIX
+    const SkillsSection = () => {
+      const skillGroups = [
         {
-          id: 1,
-          name: "Sonic Architect Vault",
-          category: "Machine Learning / Audio Processing",
-          col1Image: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=800&auto=format&fit=crop",
-          col2Image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1200&auto=format&fit=crop"
+          category: "Data Engineering",
+          tools: ["Docker", "Terraform (IaC)", "Google Cloud Platform (GCP)", "Mage", "Airflow", "dbt", "Apache Spark", "Kafka", "BigQuery"]
         },
         {
-          id: 2,
-          name: "Vector Query & Analytics Engine",
-          category: "Data Engineering & Indexing",
-          col1Image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=800&auto=format&fit=crop",
-          col2Image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop"
+          category: "AI & Machine Learning",
+          tools: ["Oracle Vector Search", "RAG Pipelines", "Vector Embeddings", "Similarity Search", "Neural Networks", "Model Evaluation"]
+        },
+        {
+          category: "Full-Stack Development",
+          tools: ["JavaScript (Node.js, Express.js)", "Dart", "PHP", "HTML5 & CSS3", "Software Testing", "RESTful APIs"]
+        },
+        {
+          category: "Database Management",
+          tools: ["Oracle DBMS", "PostgreSQL", "SQL Express", "Vector Database Management", "Schema Design"]
         }
       ];
 
       return (
-        <section className="px-6 md:px-12 py-24 bg-[#0C0C0C] border-b border-white/10">
+        <section className="px-6 md:px-12 py-24 bg-[#FAFAFA] bg-grain border-b border-black/10">
           <div className="max-w-7xl mx-auto">
             <FadeIn>
-              <span className="font-grotesk text-xs uppercase tracking-widest text-[#DC2626] font-bold">Selected Work</span>
-              <h2 className="font-kanit font-black uppercase text-4xl sm:text-5xl mt-2 mb-16">Featured Projects</h2>
+              <span className="font-grotesk text-xs uppercase tracking-widest text-[#DC2626] font-bold">Tech Stack</span>
+              <h2 className="font-kanit font-black uppercase text-4xl sm:text-5xl mt-2 mb-16 text-[#141414]">Skills & Tools</h2>
             </FadeIn>
 
-            <div className="space-y-16">
-              {projects.map((proj) => {
-                return (
-                  <div key={proj.id} className="group cursor-pointer">
-                    <div className="p-6 md:p-8 rounded-[32px] sm:rounded-[48px] bg-[#141414] border border-white/10 hover:border-[#DC2626]/40 transition-all">
-                      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-2">
-                        <h3 className="font-grotesk font-bold text-2xl sm:text-3xl text-white group-hover:text-[#DC2626] transition-colors">
-                          {proj.name}
-                        </h3>
-                        <span className="font-grotesk text-xs uppercase tracking-widest text-[#D7E2EA]/50">
-                          {proj.category}
+            <div className="grid md:grid-cols-2 gap-8">
+              {skillGroups.map((group, idx) => (
+                <FadeIn key={idx} delay={idx * 0.1}>
+                  <div className="p-8 border border-black/10 rounded-3xl bg-white h-full">
+                    <h3 className="font-grotesk font-bold text-xl text-[#DC2626] mb-6">{group.category}</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {group.tools.map((tool, tIdx) => (
+                        <span key={tIdx} className="font-inter text-xs px-3 py-1.5 rounded-lg bg-stone-100 border border-black/5 text-[#141414]/80">
+                          {tool}
                         </span>
-                      </div>
-
-                      {/* 2-Column Showcase Layout */}
-                      <div className="grid md:grid-cols-12 gap-6 items-stretch">
-                        {/* Left Column (40%) - Visual Detail */}
-                        <div className="md:col-span-5 overflow-hidden rounded-[24px] sm:rounded-[36px] border border-white/10 h-full min-h-[220px]">
-                          <img
-                            src={proj.col1Image}
-                            alt={`${proj.name} detail view`}
-                            className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                            loading="lazy"
-                          />
-                        </div>
-
-                        {/* Right Column (60%) - Hero Showcase Render */}
-                        <div className="md:col-span-7 overflow-hidden rounded-[24px] sm:rounded-[36px] border border-white/10 h-full min-h-[220px]">
-                          <img
-                            src={proj.col2Image}
-                            alt={`${proj.name} key render`}
-                            className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                            loading="lazy"
-                          />
-                        </div>
-                      </div>
+                      ))}
                     </div>
                   </div>
-                );
-              })}
+                </FadeIn>
+              ))}
             </div>
           </div>
         </section>
       );
     };
 
-    // SECTION 6: FOOTER / CONTACT SECTION
-    const FooterSection = ({ contactRef }) => {
+    // SELECTED PROJECTS SECTION
+    const ProjectsSection = () => {
+      const projects = [
+        {
+          title: "End-to-End Data Engineering Pipeline",
+          domain: "Data Infrastructure & Cloud",
+          bullets: [
+            "Architected a containerized data pipeline using Docker and Terraform for automated GCP infrastructure provisioning.",
+            "Implemented workflow orchestration to manage ingestion into BigQuery and configured dbt for production data modeling."
+          ],
+          tags: ["Docker", "Terraform", "GCP", "BigQuery", "dbt"]
+        },
+        {
+          title: "AI-Powered Data Analysis System",
+          domain: "AI & Vector Search",
+          bullets: [
+            "Developed a Retrieval-Augmented Generation (RAG) pipeline to increase AI response accuracy using Oracle Vector Search.",
+            "Created interactive business intelligence dashboards using Matplotlib and Pandas for data-driven analytics."
+          ],
+          tags: ["Oracle Vector Search", "RAG", "Embeddings", "Python", "Pandas"]
+        },
+        {
+          title: "E-Commerce Platform & Brand Systems",
+          domain: "Full-Stack & UX Design",
+          bullets: [
+            "Engineered a responsive web application leveraging a JavaScript stack, RESTful APIs, and relational schemas.",
+            "Designed brand assets and marketing banners using Adobe Illustrator and Photoshop."
+          ],
+          tags: ["JavaScript", "Node.js", "Express", "Adobe Creative Suite", "PostgreSQL"]
+        }
+      ];
+
       return (
-        <footer ref={contactRef} className="bg-[#0C0C0C] bg-grain text-[#D7E2EA] px-6 md:px-12 py-16 md:py-24 border-t border-white/10 relative z-30">
+        <section className="px-6 md:px-12 py-24 bg-[#FAFAFA] border-b border-black/10">
+          <div className="max-w-7xl mx-auto">
+            <FadeIn>
+              <span className="font-grotesk text-xs uppercase tracking-widest text-[#DC2626] font-bold">Portfolio</span>
+              <h2 className="font-kanit font-black uppercase text-4xl sm:text-5xl mt-2 mb-16 text-[#141414]">Featured Engineering Projects</h2>
+            </FadeIn>
+
+            <div className="space-y-8">
+              {projects.map((proj, idx) => (
+                <FadeIn key={idx} delay={idx * 0.1}>
+                  <div className="p-8 md:p-10 rounded-[32px] bg-white border border-black/10 hover:border-[#DC2626]/40 transition-all">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-2">
+                      <h3 className="font-grotesk font-bold text-2xl sm:text-3xl text-[#141414]">{proj.title}</h3>
+                      <span className="font-grotesk text-xs uppercase tracking-widest text-[#DC2626] font-semibold">{proj.domain}</span>
+                    </div>
+
+                    <ul className="space-y-3 font-inter text-sm text-[#141414]/70 font-light leading-relaxed mb-6 list-disc list-inside">
+                      {proj.bullets.map((b, bIdx) => (
+                        <li key={bIdx}>{b}</li>
+                      ))}
+                    </ul>
+
+                    <div className="flex flex-wrap gap-2">
+                      {proj.tags.map((t, tIdx) => (
+                        <span key={tIdx} className="font-grotesk text-[10px] uppercase font-semibold tracking-wider px-3 py-1 rounded-full bg-stone-100 border border-black/10 text-black/70">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </FadeIn>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    };
+
+    // CERTIFICATIONS SECTION
+    const CertificationsSection = () => {
+      const certs = [
+        {
+          title: "Oracle AI Vector Search Certified Professional",
+          issuer: "Oracle",
+          meta: "Credential ID: OC7508702 (Oct 2025 - Oct 2027)",
+          desc: "Key Skills: RAG, Vector indexes, Vector embeddings, Similarity search."
+        },
+        {
+          title: "Data Engineering Professional",
+          issuer: "DataTalks.Club",
+          meta: "Zoomcamp Graduate",
+          desc: "Key Skills: Docker, Terraform, GCP, Mage, BigQuery, dbt, Spark, Kafka."
+        },
+        {
+          title: "AI & Machine Learning Specialist",
+          issuer: "Kirinyaga University Computer Society",
+          meta: "Certified Specialist",
+          desc: "Key Skills: Model Evaluation, Supervised/Unsupervised Learning, Python for ML."
+        },
+        {
+          title: "Data Science Essentials with Python",
+          issuer: "Cisco Networking Academy",
+          meta: "Essentials Certification",
+          desc: "Key Skills: Data Cleaning, Visualization, Statistical Analysis, Python."
+        },
+        {
+          title: "Software Development Certification",
+          issuer: "Power Learn Project (PLP)",
+          meta: "Full-Stack Program",
+          desc: "Focus Areas: Full-Stack Development, Dart, Web Development, Software Testing."
+        }
+      ];
+
+      return (
+        <section className="px-6 md:px-12 py-24 bg-[#141414] text-white border-b border-black/10">
+          <div className="max-w-7xl mx-auto">
+            <FadeIn>
+              <span className="font-grotesk text-xs uppercase tracking-widest text-[#DC2626] font-bold">Credentials</span>
+              <h2 className="font-kanit font-black uppercase text-3xl sm:text-5xl mt-2 mb-12 text-white">Verified Certifications</h2>
+            </FadeIn>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              {certs.map((c, idx) => (
+                <FadeIn key={idx} delay={idx * 0.1}>
+                  <div className="p-8 rounded-3xl bg-[#1E1E1E] border border-white/10 h-full flex flex-col justify-between">
+                    <div>
+                      <span className="font-grotesk text-xs text-[#DC2626] font-bold uppercase">{c.issuer}</span>
+                      <h3 className="font-grotesk font-bold text-xl text-white mt-1 mb-2">{c.title}</h3>
+                      <p className="font-grotesk text-xs text-stone-400 mb-4">{c.meta}</p>
+                      <p className="font-inter text-xs text-stone-300 font-light">{c.desc}</p>
+                    </div>
+                  </div>
+                </FadeIn>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    };
+
+    // FOOTER / CONTACT SECTION
+    const FooterSection = () => {
+      return (
+        <footer className="bg-[#FAFAFA] bg-grain text-[#141414] px-6 md:px-12 py-16 md:py-24 border-t border-black/10">
           <div className="max-w-7xl mx-auto flex flex-col justify-between items-center text-center gap-12">
             
-            <FadeIn delay={0} y={30}>
-              <h2 className="font-kanit font-black uppercase text-[clamp(2.5rem,8vw,90px)] leading-tight tracking-tight">
-                Let&apos;s build something <span className="gmt-crimson-gradient">extraordinary.</span>
+            <FadeIn y={30}>
+              <h2 className="font-kanit font-black uppercase text-[clamp(2.5rem,8vw,80px)] leading-tight tracking-tight text-[#141414]">
+                Let's build scalable <br /> <span className="gmt-crimson-gradient">data & AI systems.</span>
               </h2>
             </FadeIn>
 
             <FadeIn delay={0.15} y={20}>
-              <a
-                href="mailto:contact@jack3d.com"
-                className="font-grotesk font-bold text-xl sm:text-3xl md:text-4xl text-[#DC2626] hover:underline underline-offset-8 transition-all"
-              >
-                contact@jack3d.com
-              </a>
+              <div className="space-y-2">
+                <a
+                  href="mailto:gonatimothy2@gmail.com"
+                  className="font-grotesk font-bold text-2xl sm:text-3xl md:text-4xl text-[#DC2626] hover:underline underline-offset-8 transition-all block"
+                >
+                  gonatimothy2@gmail.com
+                </a>
+                <p className="font-grotesk text-sm text-[#141414]/60">+254 708 443 570 • Nairobi, Kenya</p>
+              </div>
             </FadeIn>
 
-            <div className="w-full flex flex-col md:flex-row justify-between items-center pt-12 border-t border-white/10 font-inter text-xs sm:text-sm text-[#D7E2EA]/60 gap-4">
-              <p>© {new Date().getFullYear()} GMT Studio. All rights reserved.</p>
-              <div className="flex gap-6 font-grotesk uppercase tracking-wider text-xs">
-                <a href="#" className="hover:text-white transition-colors">Twitter / X</a>
-                <a href="#" className="hover:text-white transition-colors">Instagram</a>
-                <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
+            <div className="w-full flex flex-col md:flex-row justify-between items-center pt-12 border-t border-black/10 font-inter text-xs text-[#141414]/50 gap-4">
+              <p>© {new Date().getFullYear()} Timothy Gona. All rights reserved.</p>
+              <div className="flex flex-wrap justify-center gap-6 font-grotesk uppercase tracking-wider text-xs">
+                <a href="https://github.com/Gonablitz" target="_blank" rel="noreferrer" className="hover:text-[#DC2626] transition-colors">GitHub</a>
+                <a href="https://www.linkedin.com/in/timothy-gona/" target="_blank" rel="noreferrer" className="hover:text-[#DC2626] transition-colors">LinkedIn</a>
+                <a href="./Timothy_Gona_CV.pdf" target="_blank" rel="noreferrer" className="hover:text-[#DC2626] transition-colors">CV</a>
+                <a href="https://cal.com/timothy-gona" target="_blank" rel="noreferrer" className="hover:text-[#DC2626] transition-colors">Book Call</a>
               </div>
             </div>
 
@@ -340,27 +459,21 @@
       );
     };
 
-    // APP MAIN CONTAINER
+    // APP CONTAINER
     const App = () => {
-      const contactRef = useRef(null);
-
-      const scrollToContact = () => {
-        contactRef.current?.scrollIntoView({ behavior: 'smooth' });
-      };
-
       return (
-        <div className="min-h-screen bg-[#0C0C0C] text-[#D7E2EA] selection:bg-[#DC2626] selection:text-white">
-          <HeroSection onContactClick={scrollToContact} />
+        <div className="min-h-screen bg-[#FAFAFA] text-[#141414] selection:bg-[#DC2626] selection:text-white">
+          <HeroSection />
           <MarqueeSection />
-          <AboutSection onContactClick={scrollToContact} />
-          <ServicesSection />
+          <AboutSection />
+          <SkillsSection />
           <ProjectsSection />
-          <FooterSection contactRef={contactRef} />
+          <CertificationsSection />
+          <FooterSection />
         </div>
       );
     };
 
-    // RENDER TO DOM
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<App />);
   </script>
