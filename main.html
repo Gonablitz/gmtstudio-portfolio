@@ -29,6 +29,15 @@
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
 
+  <!-- Google Analytics 4 Tag (Replace G-XXXXXXXXXX with your Measurement ID) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -208,7 +217,6 @@
       const [errorMessage, setErrorMessage] = useState('');
       const [formData, setFormData] = useState({ name: '', contact: '', message: '' });
 
-      // Keyboard Accessibility: Close on Escape key
       useEffect(() => {
         const handleKeyDown = (e) => {
           if (e.key === 'Escape' && isOpen) {
@@ -223,7 +231,6 @@
         e.preventDefault();
         setErrorMessage('');
 
-        // Strict Sanitization & Edge-Case Validation
         const cleanName = formData.name.trim();
         const cleanContact = formData.contact.trim();
         const cleanMessage = formData.message.trim();
@@ -233,12 +240,10 @@
           return;
         }
 
-        // Multi-click Guard / Debounce
         setIsSubmitting(true);
         setStatus('sending');
 
         setTimeout(() => {
-          // Format message for WhatsApp
           const text = `Hi Timothy,\n\nName: ${cleanName}\nContact: ${cleanContact || 'Not provided'}\n\nMessage:\n${cleanMessage}`;
           const encodedText = encodeURIComponent(text);
           
@@ -253,7 +258,6 @@
 
       return (
         <div className="fixed bottom-6 right-6 z-50 font-inter">
-          {/* Trigger Button */}
           {!isOpen && (
             <button
               onClick={() => setIsOpen(true)}
@@ -265,10 +269,8 @@
             </button>
           )}
 
-          {/* Chat Window */}
           {isOpen && (
             <div className="w-[320px] sm:w-[380px] bg-white border border-black/15 rounded-3xl shadow-2xl overflow-hidden flex flex-col">
-              {/* Header */}
               <div className="bg-[#141414] text-white p-4 flex justify-between items-center border-b border-white/10">
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
@@ -283,7 +285,6 @@
                 </button>
               </div>
 
-              {/* Form Body */}
               <form onSubmit={handleSubmit} className="p-5 space-y-3.5 bg-[#FAFAFA]">
                 {errorMessage && (
                   <div className="p-3 bg-red-100 border border-red-300 text-red-800 rounded-xl text-xs font-semibold">
@@ -391,7 +392,6 @@
               </p>
             </FadeIn>
 
-            {/* Focused Action CTAs */}
             <FadeIn delay={0.4}>
               <div className="flex flex-wrap items-center gap-4 pt-2">
                 <a
@@ -595,7 +595,6 @@
                       </span>
                     </div>
 
-                    {/* Measurable Outcome Callout Banner */}
                     <div className="my-4 p-4 rounded-2xl bg-stone-50 border border-emerald-500/30 text-[#141414] font-inter text-xs sm:text-sm font-medium flex items-start gap-2.5">
                       <span className="text-emerald-600 font-bold">🚀 Measurable Impact:</span>
                       <span>{proj.impact}</span>
@@ -616,7 +615,6 @@
                         ))}
                       </div>
 
-                      {/* Direct Action Buttons */}
                       <div className="flex items-center gap-3 font-grotesk text-xs uppercase tracking-wider">
                         <a
                           href={proj.github}
@@ -724,7 +722,6 @@
           return;
         }
 
-        // Multi-click Guard
         setIsSubmitting(true);
 
         setTimeout(() => {
@@ -756,7 +753,6 @@
               </FadeIn>
             </div>
 
-            {/* Direct Quick Contact Form */}
             <FadeIn delay={0.2} className="max-w-2xl mx-auto w-full bg-white p-8 rounded-3xl border border-black/10">
               <h3 className="font-grotesk font-bold text-lg mb-4 text-[#141414]">Send a Direct Message</h3>
               
@@ -813,7 +809,67 @@
               </form>
             </FadeIn>
 
-            <div className="w-full flex flex-col md:flex-row justify-between items-center pt-12 border-t border-black/10 font-inter text-xs text-[#141414]/50 gap-4">
+            {/* FlyRank Graduate Verification Badge Component */}
+            <FadeIn delay={0.25} className="flex flex-col items-center justify-center gap-3 pt-6 border-t border-black/10">
+              <span className="font-grotesk text-[10px] uppercase tracking-widest text-[#141414]/50 font-bold">
+                Internship Credential Verification
+              </span>
+              <a
+                href="https://internship.flyrank.ai/verify?id=FR-D1-T668H-R789R&amp;first_name=Timothy"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Verify Timothy Gona's FlyRank AI Internship credential FR-D1-T668H-R789R"
+                style={{
+                  boxSizing: 'border-box',
+                  margin: 0,
+                  padding: '22px',
+                  border: '1px solid #DDE4E7',
+                  background: '#FFFFFF',
+                  textDecoration: 'none',
+                  fontFamily: "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif",
+                  fontStyle: 'normal',
+                  lineHeight: 1.25,
+                  textTransform: 'none',
+                  float: 'none',
+                  WebkitFontSmoothing: 'antialiased',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  width: '236px',
+                  borderRadius: '20px',
+                  boxShadow: '0 1px 2px rgba(5,31,33,0.05)'
+                }}
+              >
+                <span style={{ margin: 0, padding: 0, border: 0, background: 'none', color: 'inherit', fontWeight: 400, fontStyle: 'normal', letterSpacing: 'normal', textTransform: 'none', textDecoration: 'none', whiteSpace: 'normal', float: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <svg width="30" height="30" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" style={{ display: 'block', flex: 'none', opacity: 1, transform: 'none', maxWidth: 'none' }}>
+                    <rect width="96" height="96" rx="22" fill="#051F21" />
+                    <path d="M28.2354 74.2202V67.9039C29.6419 68.4369 31.3724 68.7055 33.4311 68.7055C35.3235 68.7055 36.8153 68.2396 37.8979 67.3079C38.9805 66.3762 39.9566 64.8695 40.8218 62.792L42.6887 58.3139L29.8976 29.2879C35.0038 29.2879 39.6028 32.3307 41.5294 36.9893L47.0746 50.3985L56.0126 28.6038C57.9221 23.9452 62.5168 20.894 67.6187 20.894L50.0795 63.5936C48.4556 67.5933 46.5205 70.5102 44.2743 72.3484C42.0281 74.1867 39.1169 75.1058 35.5451 75.1058C32.6212 75.1058 30.1875 74.812 28.2354 74.2244V74.2202Z" fill="#54E399" />
+                  </svg>
+                  <span style={{ margin: 0, padding: 0, border: 0, background: 'none', color: 'rgba(5,31,33,0.5)', fontWeight: 700, fontStyle: 'normal', letterSpacing: '0.14em', textTransform: 'uppercase', textDecoration: 'none', whiteSpace: 'normal', float: 'none', fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Consolas,monospace', fontSize: '8.5px', lineHeight: 1.4 }}>
+                    FlyRank AI Internship
+                  </span>
+                </span>
+                <span style={{ margin: '18px 0', padding: 0, border: 0, background: '#E4EAED', color: 'inherit', fontWeight: 400, fontStyle: 'normal', letterSpacing: 'normal', textTransform: 'none', textDecoration: 'none', whiteSpace: 'normal', float: 'none', display: 'block', height: '1px' }}></span>
+                <span style={{ margin: 0, padding: 0, border: 0, background: 'none', color: 'inherit', fontWeight: 400, fontStyle: 'normal', letterSpacing: 'normal', textTransform: 'none', textDecoration: 'none', whiteSpace: 'normal', float: 'none', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <span style={{ margin: 0, padding: 0, border: 0, background: 'none', color: '#051F21', fontWeight: 600, fontStyle: 'normal', letterSpacing: '-0.02em', textTransform: 'none', textDecoration: 'none', whiteSpace: 'normal', float: 'none', fontSize: '19px', lineHeight: 1.25 }}>Timothy Gona</span>
+                  <span style={{ margin: 0, padding: 0, border: 0, background: 'none', color: '#1A7A4A', fontWeight: 600, fontStyle: 'normal', letterSpacing: 'normal', textTransform: 'none', textDecoration: 'none', whiteSpace: 'normal', float: 'none', fontSize: '13px' }}>Machine Learning</span>
+                  <span style={{ margin: 0, padding: 0, border: 0, background: 'none', color: 'rgba(5,31,33,0.5)', fontWeight: 400, fontStyle: 'normal', letterSpacing: 'normal', textTransform: 'none', textDecoration: 'none', whiteSpace: 'normal', float: 'none', fontSize: '12px' }}>June 2026 cohort</span>
+                </span>
+                <span style={{ margin: '18px 0 0 0', padding: '10px 12px', border: '1px solid rgba(84,227,153,0.28)', background: 'rgba(84,227,153,0.12)', color: 'inherit', fontWeight: 400, fontStyle: 'normal', letterSpacing: 'normal', textTransform: 'none', textDecoration: 'none', whiteSpace: 'normal', float: 'none', display: 'flex', alignItems: 'center', gap: '8px', borderRadius: '12px' }}>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" style={{ display: 'block', flex: 'none', opacity: 1, transform: 'none', maxWidth: 'none' }}>
+                    <circle cx="12" cy="12" r="10" stroke="#1A7A4A" strokeWidth="1.5" />
+                    <path d="M7.9 12.3l2.8 2.8 5.4-5.8" stroke="#1A7A4A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <span style={{ margin: 0, padding: 0, border: 0, background: 'none', color: '#1A7A4A', fontWeight: 600, fontStyle: 'normal', letterSpacing: 'normal', textTransform: 'none', textDecoration: 'none', whiteSpace: 'normal', float: 'none', fontSize: '12.5px' }}>Verified credential</span>
+                </span>
+                <span style={{ margin: '18px 0 0 0', padding: '16px 0 0 0', border: 0, borderTop: '1px solid #E4EAED', background: 'none', color: 'inherit', fontWeight: 400, fontStyle: 'normal', letterSpacing: 'normal', textTransform: 'none', textDecoration: 'none', whiteSpace: 'normal', float: 'none', display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                  <span style={{ margin: 0, padding: 0, border: 0, background: 'none', color: 'rgba(5,31,33,0.5)', fontWeight: 700, fontStyle: 'normal', letterSpacing: '0.14em', textTransform: 'uppercase', textDecoration: 'none', whiteSpace: 'normal', float: 'none', fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Consolas,monospace', fontSize: '8px' }}>Credential ID</span>
+                  <span style={{ margin: 0, padding: 0, border: 0, background: 'none', color: '#051F21', fontWeight: 400, fontStyle: 'normal', letterSpacing: 'normal', textTransform: 'none', textDecoration: 'none', whiteSpace: 'normal', float: 'none', fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Consolas,monospace', fontSize: '11.5px' }}>FR-D1-T668H-R789R</span>
+                  <span style={{ margin: '8px 0 0 0', padding: 0, border: 0, background: 'none', color: 'rgba(5,31,33,0.5)', fontWeight: 400, fontStyle: 'normal', letterSpacing: 'normal', textTransform: 'none', textDecoration: 'none', whiteSpace: 'normal', float: 'none', fontSize: '11.5px' }}>internship.flyrank.ai/verify ↗</span>
+                </span>
+              </a>
+            </FadeIn>
+
+            <div className="w-full flex flex-col md:flex-row justify-between items-center pt-8 border-t border-black/10 font-inter text-xs text-[#141414]/50 gap-4">
               <p>© {new Date().getFullYear()} Timothy Gona Muthoni. All rights reserved.</p>
               <div className="flex flex-wrap justify-center gap-6 font-grotesk uppercase tracking-wider text-xs">
                 <a href="https://github.com/Gonablitz" target="_blank" rel="noreferrer" className="hover:text-[#DC2626] transition-colors">GitHub</a>
