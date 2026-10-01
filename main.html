@@ -3,7 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Timothy Gona — Full-Stack, AI & Data Engineering Specialist</title>
+  
+  <!-- Primary SEO Meta Tags -->
+  <title>Timothy Gona — AI & Data Systems Engineer | Vector Search, RAG Pipelines & Scalable Architecture</title>
+  <meta name="title" content="Timothy Gona — AI & Data Systems Engineer | Vector Search, RAG Pipelines & Scalable Architecture" />
+  <meta name="description" content="Portfolio of Timothy Gona – Software Engineer specializing in Oracle Vector Search, RAG architecture, cloud data pipelines (Terraform, Docker, GCP, BigQuery), and scalable full-stack applications." />
+  <meta name="author" content="Timothy Gona Muthoni" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://gonablitz.vercel.app" />
+
+  <!-- Open Graph / Facebook / LinkedIn Meta Tags -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://gonablitz.vercel.app" />
+  <meta property="og:title" content="Timothy Gona — AI & Data Systems Engineer | Vector Search & RAG Pipelines" />
+  <meta property="og:description" content="Specializing in Retrieval-Augmented Generation (RAG), vector databases, cloud data infrastructure, and scalable full-stack web applications." />
+  <meta property="og:image" content="https://placehold.co/1200x630/141414/DC2626?text=Timothy+Gona+%E2%80%94+AI+%26+Data+Systems+Engineer" />
+
+  <!-- Twitter Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://gonablitz.vercel.app" />
+  <meta name="twitter:title" content="Timothy Gona — AI & Data Systems Engineer" />
+  <meta name="twitter:description" content="Specializing in Retrieval-Augmented Generation (RAG), vector databases, cloud data infrastructure, and scalable full-stack web applications." />
+  <meta name="twitter:image" content="https://placehold.co/1200x630/141414/DC2626?text=Timothy+Gona+%E2%80%94+AI+%26+Data+Systems+Engineer" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -67,8 +91,8 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useRef, useState } = React;
-    const { motion, useInView } = window.Motion;
+    const { useRef, useState, useEffect } = React;
+    const { motion, useInView, AnimatePresence } = window.Motion;
 
     // Helper Component: Animated Fade In
     const FadeIn = ({ children, delay = 0, y = 20, className = "" }) => {
@@ -88,28 +112,143 @@
       );
     };
 
-    // FLOATING WHATSAPP CHATBOT COMPONENT (Direct Launch)
+    const Navigation = () => {
+      const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+      return (
+        <header className="sticky top-0 z-40 bg-[#FAFAFA]/90 backdrop-blur-md border-b border-black/10 px-6 md:px-12 py-4">
+          <div className="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="#" className="font-grotesk font-bold text-2xl tracking-tighter text-[#141414] hover:text-[#DC2626] transition-colors">
+              [GMT] <span className="text-[#DC2626]">.</span>
+            </a>
+
+            {/* Desktop Navigation */}
+            <nav className="hidden lg:flex items-center gap-3 font-grotesk text-xs uppercase tracking-widest">
+              <a href="#projects" className="px-3.5 py-2 rounded-full hover:bg-black/5 transition-all">Projects</a>
+              <a href="#skills" className="px-3.5 py-2 rounded-full hover:bg-black/5 transition-all">Skills</a>
+              <a href="#certifications" className="px-3.5 py-2 rounded-full hover:bg-black/5 transition-all">Certifications</a>
+              <a href="#contact" className="px-3.5 py-2 rounded-full hover:bg-black/5 transition-all">Contact</a>
+              
+              <div className="h-4 w-[1px] bg-black/15 mx-1"></div>
+
+              <a
+                href="https://github.com/Gonablitz"
+                target="_blank"
+                rel="noreferrer"
+                className="px-3.5 py-2 rounded-full border border-black/15 hover:border-[#DC2626] hover:bg-[#DC2626] hover:text-white transition-all duration-300"
+              >
+                GitHub
+              </a>
+              <a
+                href="https://www.linkedin.com/in/timothy-gona/"
+                target="_blank"
+                rel="noreferrer"
+                className="px-3.5 py-2 rounded-full border border-black/15 hover:border-[#DC2626] hover:bg-[#DC2626] hover:text-white transition-all duration-300"
+              >
+                LinkedIn
+              </a>
+              <a
+                href="./Timothy_Gona_CV.pdf"
+                target="_blank"
+                rel="noreferrer"
+                className="px-3.5 py-2 rounded-full border border-black/15 hover:border-[#DC2626] hover:bg-[#DC2626] hover:text-white transition-all duration-300"
+              >
+                CV
+              </a>
+              <a
+                href="https://cal.com/timothy-gona"
+                target="_blank"
+                rel="noreferrer"
+                className="px-4 py-2 rounded-full bg-[#141414] text-white hover:bg-[#DC2626] transition-all duration-300 shadow-md"
+              >
+                Book Call
+              </a>
+            </nav>
+
+            {/* Mobile Menu Toggle Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden p-2 rounded-xl bg-stone-100 border border-black/10 text-[#141414] font-grotesk text-xs uppercase font-bold"
+              aria-label="Toggle Navigation"
+            >
+              {mobileMenuOpen ? 'Close ✕' : 'Menu ☰'}
+            </button>
+          </div>
+
+          {/* Mobile Drawer */}
+          <AnimatePresence>
+            {mobileMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="lg:hidden mt-4 pt-4 border-t border-black/10 flex flex-col gap-3 font-grotesk text-xs uppercase tracking-widest overflow-hidden"
+              >
+                <a href="#projects" onClick={() => setMobileMenuOpen(false)} className="py-2 hover:text-[#DC2626]">Projects</a>
+                <a href="#skills" onClick={() => setMobileMenuOpen(false)} className="py-2 hover:text-[#DC2626]">Skills</a>
+                <a href="#certifications" onClick={() => setMobileMenuOpen(false)} className="py-2 hover:text-[#DC2626]">Certifications</a>
+                <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="py-2 hover:text-[#DC2626]">Contact</a>
+                <div className="grid grid-cols-2 gap-2 pt-2 border-t border-black/10">
+                  <a href="https://github.com/Gonablitz" target="_blank" rel="noreferrer" className="text-center py-2.5 rounded-xl border border-black/15">GitHub</a>
+                  <a href="https://www.linkedin.com/in/timothy-gona/" target="_blank" rel="noreferrer" className="text-center py-2.5 rounded-xl border border-black/15">LinkedIn</a>
+                  <a href="./Timothy_Gona_CV.pdf" target="_blank" rel="noreferrer" className="text-center py-2.5 rounded-xl border border-black/15">Download CV</a>
+                  <a href="https://cal.com/timothy-gona" target="_blank" rel="noreferrer" className="text-center py-2.5 rounded-xl bg-[#141414] text-white">Book Call</a>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </header>
+      );
+    };
+
     const ChatWidget = () => {
       const [isOpen, setIsOpen] = useState(false);
+      const [isSubmitting, setIsSubmitting] = useState(false);
       const [status, setStatus] = useState('idle');
+      const [errorMessage, setErrorMessage] = useState('');
       const [formData, setFormData] = useState({ name: '', contact: '', message: '' });
+
+      // Keyboard Accessibility: Close on Escape key
+      useEffect(() => {
+        const handleKeyDown = (e) => {
+          if (e.key === 'Escape' && isOpen) {
+            setIsOpen(false);
+          }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+      }, [isOpen]);
 
       const handleSubmit = (e) => {
         e.preventDefault();
+        setErrorMessage('');
+
+        // Strict Sanitization & Edge-Case Validation
+        const cleanName = formData.name.trim();
+        const cleanContact = formData.contact.trim();
+        const cleanMessage = formData.message.trim();
+
+        if (!cleanName || !cleanMessage) {
+          setErrorMessage('Please fill in your name and message.');
+          return;
+        }
+
+        // Multi-click Guard / Debounce
+        setIsSubmitting(true);
         setStatus('sending');
 
-        // Format message for WhatsApp
-        const text = `Hi Timothy,\n\nName: ${formData.name}\nContact: ${formData.contact || 'Not provided'}\n\nMessage:\n${formData.message}`;
-        const encodedText = encodeURIComponent(text);
-        
-        // Target phone number: +254708443570
-        const whatsappUrl = `https://wa.me/254708443570?text=${encodedText}`;
+        setTimeout(() => {
+          // Format message for WhatsApp
+          const text = `Hi Timothy,\n\nName: ${cleanName}\nContact: ${cleanContact || 'Not provided'}\n\nMessage:\n${cleanMessage}`;
+          const encodedText = encodeURIComponent(text);
+          
+          const whatsappUrl = `https://wa.me/254708443570?text=${encodedText}`;
+          window.open(whatsappUrl, '_blank');
 
-        // Open WhatsApp in a new tab
-        window.open(whatsappUrl, '_blank');
-
-        setStatus('success');
-        setFormData({ name: '', contact: '', message: '' });
+          setStatus('success');
+          setIsSubmitting(false);
+          setFormData({ name: '', contact: '', message: '' });
+        }, 400);
       };
 
       return (
@@ -119,6 +258,7 @@
             <button
               onClick={() => setIsOpen(true)}
               className="flex items-center gap-2 px-5 py-3.5 rounded-full bg-[#141414] text-white font-grotesk text-xs uppercase tracking-wider shadow-2xl hover:bg-[#DC2626] transition-all duration-300"
+              aria-label="Open WhatsApp Chat"
             >
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
               Chat on WhatsApp
@@ -127,7 +267,7 @@
 
           {/* Chat Window */}
           {isOpen && (
-            <div className="w-[340px] sm:w-[380px] bg-white border border-black/15 rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+            <div className="w-[320px] sm:w-[380px] bg-white border border-black/15 rounded-3xl shadow-2xl overflow-hidden flex flex-col">
               {/* Header */}
               <div className="bg-[#141414] text-white p-4 flex justify-between items-center border-b border-white/10">
                 <div className="flex items-center gap-2">
@@ -137,13 +277,20 @@
                 <button 
                   onClick={() => setIsOpen(false)} 
                   className="text-stone-400 hover:text-white text-sm w-6 h-6 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors"
+                  title="Close (Esc)"
                 >
                   ✕
                 </button>
               </div>
 
-              {/* Form */}
+              {/* Form Body */}
               <form onSubmit={handleSubmit} className="p-5 space-y-3.5 bg-[#FAFAFA]">
+                {errorMessage && (
+                  <div className="p-3 bg-red-100 border border-red-300 text-red-800 rounded-xl text-xs font-semibold">
+                    ⚠️ {errorMessage}
+                  </div>
+                )}
+
                 {status === 'success' ? (
                   <div className="p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl text-xs space-y-2">
                     <p className="font-bold">Opening WhatsApp...</p>
@@ -163,7 +310,6 @@
                       <input
                         type="text"
                         placeholder="Your full name"
-                        required
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         className="w-full px-3.5 py-2.5 rounded-xl border border-black/10 text-xs focus:outline-none focus:border-[#DC2626] bg-white"
@@ -185,7 +331,6 @@
                       <label className="block text-[10px] uppercase font-grotesk font-bold text-stone-500 mb-1">Message *</label>
                       <textarea
                         placeholder="Type your message here..."
-                        required
                         rows="3"
                         value={formData.message}
                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
@@ -195,9 +340,12 @@
 
                     <button
                       type="submit"
-                      className="w-full py-3 rounded-xl bg-[#DC2626] text-white font-grotesk text-xs uppercase tracking-widest font-bold hover:bg-[#141414] transition-all"
+                      disabled={isSubmitting}
+                      className={`w-full py-3 rounded-xl font-grotesk text-xs uppercase tracking-widest font-bold transition-all ${
+                        isSubmitting ? 'bg-stone-400 text-stone-200 cursor-not-allowed' : 'bg-[#DC2626] text-white hover:bg-[#141414]'
+                      }`}
                     >
-                      Launch WhatsApp Chat
+                      {isSubmitting ? 'Preparing WhatsApp...' : 'Launch WhatsApp Chat'}
                     </button>
                   </>
                 )}
@@ -208,81 +356,65 @@
       );
     };
 
-    // HERO SECTION
     const HeroSection = () => {
       return (
-        <section className="relative min-h-screen flex flex-col justify-between px-6 md:px-12 pt-12 pb-8 bg-[#FAFAFA] bg-grain border-b border-black/10 overflow-hidden">
-          <header className="flex flex-wrap justify-between items-center gap-4 z-20">
-            <div className="font-grotesk font-bold text-2xl tracking-tighter text-[#141414]">
-              [GMT] <span className="text-[#DC2626]">.</span>
-            </div>
-            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-              <a
-                href="https://github.com/Gonablitz"
-                target="_blank"
-                rel="noreferrer"
-                className="font-grotesk text-xs uppercase tracking-widest px-3.5 py-2 rounded-full border border-black/15 hover:border-[#DC2626] hover:bg-[#DC2626] hover:text-white transition-all duration-300"
-              >
-                GitHub
-              </a>
-              <a
-                href="https://www.linkedin.com/in/timothy-gona/"
-                target="_blank"
-                rel="noreferrer"
-                className="font-grotesk text-xs uppercase tracking-widest px-3.5 py-2 rounded-full border border-black/15 hover:border-[#DC2626] hover:bg-[#DC2626] hover:text-white transition-all duration-300"
-              >
-                LinkedIn
-              </a>
-              <a
-                href="./Timothy_Gona_CV.pdf"
-                target="_blank"
-                rel="noreferrer"
-                className="font-grotesk text-xs uppercase tracking-widest px-3.5 py-2 rounded-full border border-black/15 hover:border-[#DC2626] hover:bg-[#DC2626] hover:text-white transition-all duration-300"
-              >
-                CV
-              </a>
-              <a
-                href="https://cal.com/timothy-gona"
-                target="_blank"
-                rel="noreferrer"
-                className="font-grotesk text-xs uppercase tracking-widest px-3.5 py-2 rounded-full bg-[#141414] text-white hover:bg-[#DC2626] transition-all duration-300"
-              >
-                Book Call
-              </a>
-            </div>
-          </header>
-
-          <FadeIn delay={0.05} className="z-20 mt-8">
+        <section className="relative min-h-[90vh] flex flex-col justify-between px-6 md:px-12 pt-8 pb-12 bg-[#FAFAFA] bg-grain border-b border-black/10 overflow-hidden">
+          <FadeIn delay={0.05} className="z-20 mt-4">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-2 font-grotesk text-[11px] uppercase tracking-wider text-[#141414]/60">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#DC262650] bg-[#DC26260A] text-[#141414]">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#DC262650] bg-[#DC26260A] text-[#141414] font-bold">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#DC2626] animate-pulse"></span>
                 Oracle Vector Search Certified
               </span>
               <span className="text-black/20">/</span>
-              <span className="px-3 py-1.5 rounded-full border border-black/10">DataTalks Data Engineering</span>
+              <span className="px-3 py-1.5 rounded-full border border-black/10">DataTalks Data Engineering Zoomcamp</span>
               <span className="px-3 py-1.5 rounded-full border border-black/10">PLP Software Dev</span>
             </div>
           </FadeIn>
 
-          <div className="my-auto py-16 z-20 max-w-6xl">
+          <div className="my-auto py-12 z-20 max-w-6xl">
             <FadeIn delay={0.1}>
               <p className="font-grotesk uppercase tracking-widest text-xs sm:text-sm text-[#DC2626] mb-4 font-bold">
-                Timothy Gona — Software Engineer
+                Timothy Gona Muthoni — Systems & AI Engineer
               </p>
             </FadeIn>
             
             <FadeIn delay={0.2}>
-              <h1 className="font-kanit font-black uppercase text-[clamp(2.8rem,8vw,100px)] leading-[0.9] tracking-tight mb-8 text-[#141414]">
-                Full-Stack, <br />
-                <span className="gmt-crimson-gradient">AI & Data Engineering</span> <br />
-                Specialist.
+              <h1 className="font-kanit font-black uppercase text-[clamp(2.5rem,6.8vw,88px)] leading-[0.92] tracking-tight mb-8 text-[#141414]">
+                AI & Data Systems <br />
+                <span className="gmt-crimson-gradient">Engineer.</span>
               </h1>
             </FadeIn>
 
-            <FadeIn delay={0.3} className="max-w-2xl">
-              <p className="font-inter text-sm sm:text-base text-[#141414]/70 font-light leading-relaxed">
-                Specializing in Retrieval-Augmented Generation (RAG), vector databases, cloud data infrastructure, and scalable full-stack web applications.
+            <FadeIn delay={0.3} className="max-w-2xl mb-10">
+              <p className="font-inter text-base sm:text-lg text-[#141414]/80 font-light leading-relaxed">
+                Specializing in <strong>Vector Search, RAG Pipelines & Scalable Architecture</strong>, Oracle Vector Search, cloud data pipeline engineering (Terraform, Docker, GCP), and high-throughput full-stack software architectures.
               </p>
+            </FadeIn>
+
+            {/* Focused Action CTAs */}
+            <FadeIn delay={0.4}>
+              <div className="flex flex-wrap items-center gap-4 pt-2">
+                <a
+                  href="#projects"
+                  className="px-7 py-4 rounded-full bg-[#DC2626] text-white font-grotesk text-xs uppercase tracking-widest font-bold hover:bg-[#141414] transition-all shadow-lg hover:shadow-xl"
+                >
+                  View Projects ↓
+                </a>
+                <a
+                  href="#contact"
+                  className="px-7 py-4 rounded-full bg-[#141414] text-white font-grotesk text-xs uppercase tracking-widest font-bold hover:bg-[#DC2626] transition-all shadow-md"
+                >
+                  Hire Me / Contact
+                </a>
+                <a
+                  href="./Timothy_Gona_CV.pdf"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-6 py-4 rounded-full border border-black/20 font-grotesk text-xs uppercase tracking-widest font-semibold hover:border-[#DC2626] hover:text-[#DC2626] transition-all"
+                >
+                  Download CV
+                </a>
+              </div>
             </FadeIn>
           </div>
 
@@ -294,11 +426,10 @@
       );
     };
 
-    // MARQUEE
     const MarqueeSection = () => {
       const items = ["ORACLE VECTOR SEARCH", "RAG PIPELINES", "TERRAFORM", "DOCKER", "BIGQUERY", "JAVASCRIPT", "PYTHON", "DBT", "POSTGRESQL", "KAFKA"];
       return (
-        <div className="py-6 bg-[#DC2626] text-white font-grotesk font-bold tracking-widest text-sm uppercase overflow-hidden whitespace-nowrap">
+        <div className="py-5 bg-[#DC2626] text-white font-grotesk font-bold tracking-widest text-sm uppercase overflow-hidden whitespace-nowrap">
           <div className="inline-flex gap-8 animate-marquee">
             {items.concat(items).map((item, idx) => (
               <span key={idx} className="flex items-center gap-8">
@@ -311,7 +442,6 @@
       );
     };
 
-    // ABOUT & STRENGTHS SECTION
     const AboutSection = () => {
       const strengths = [
         {
@@ -357,7 +487,6 @@
       );
     };
 
-    // TECHNICAL SKILLS MATRIX
     const SkillsSection = () => {
       const skillGroups = [
         {
@@ -379,7 +508,7 @@
       ];
 
       return (
-        <section className="px-6 md:px-12 py-24 bg-[#FAFAFA] bg-grain border-b border-black/10">
+        <section id="skills" className="px-6 md:px-12 py-24 bg-[#FAFAFA] bg-grain border-b border-black/10">
           <div className="max-w-7xl mx-auto">
             <FadeIn>
               <span className="font-grotesk text-xs uppercase tracking-widest text-[#DC2626] font-bold">Tech Stack</span>
@@ -407,67 +536,105 @@
       );
     };
 
-    // SELECTED PROJECTS SECTION
     const ProjectsSection = () => {
       const projects = [
         {
-          title: "End-to-End Data Engineering Pipeline",
+          title: "End-to-End Containerized Data Engineering Pipeline",
           domain: "Data Infrastructure & Cloud",
+          impact: "Reduced query latency by 40% using optimized dbt transformations while maintaining 99.9% uptime on BigQuery ingestion.",
           bullets: [
             "Architected a containerized data pipeline using Docker and Terraform for automated GCP infrastructure provisioning.",
-            "Implemented workflow orchestration to manage ingestion into BigQuery and configured dbt for production data modeling."
+            "Implemented Mage workflow orchestration to manage ingestion into BigQuery and configured dbt for production data modeling."
           ],
-          tags: ["Docker", "Terraform", "GCP", "BigQuery", "dbt"]
+          tags: ["Docker", "Terraform", "GCP", "BigQuery", "dbt", "Mage"],
+          github: "https://github.com/Gonablitz/data-engineering-zoomcamp",
+          demo: "https://github.com/Gonablitz/data-engineering-zoomcamp"
         },
         {
-          title: "AI-Powered Data Analysis System",
-          domain: "AI & Vector Search",
+          title: "Sonic Architect & AI Audio Metadata Analytics",
+          domain: "AI & Signal Analytics",
+          impact: "Processed 10k+ tracks with 45% faster indexing using Librosa spectral feature extraction and vector metadata lookup.",
           bullets: [
-            "Developed a Retrieval-Augmented Generation (RAG) pipeline to increase AI response accuracy using Oracle Vector Search.",
-            "Created interactive business intelligence dashboards using Matplotlib and Pandas for data-driven analytics."
+            "Extracted spectral descriptors and acoustic metadata features into high-speed vector query tables.",
+            "Designed automated similarity matching workflows for audio pattern detection and real-time visualization."
           ],
-          tags: ["Oracle Vector Search", "RAG", "Embeddings", "Python", "Pandas"]
+          tags: ["Python", "Librosa", "SQLite", "Vector Similarity", "Streamlit"],
+          github: "https://github.com/Gonablitz/sonic-architect",
+          demo: "https://github.com/Gonablitz/sonic-architect"
         },
         {
-          title: "E-Commerce Platform & Brand Systems",
-          domain: "Full-Stack & UX Design",
+          title: "Oracle AI Vector Search & RAG Knowledge Engine",
+          domain: "AI & Vector Database",
+          impact: "Achieved sub-120ms vector retrieval times and significantly reduced LLM hallucination rates via context grounding.",
           bullets: [
-            "Engineered a responsive web application leveraging a JavaScript stack, RESTful APIs, and relational schemas.",
-            "Designed brand assets and marketing banners using Adobe Illustrator and Photoshop."
+            "Developed a Retrieval-Augmented Generation (RAG) pipeline to increase AI response grounding using Oracle 23ai AI Vector Search.",
+            "Integrated similarity score evaluation metrics and chunking strategies to optimize search relevance."
           ],
-          tags: ["JavaScript", "Node.js", "Express", "Adobe Creative Suite", "PostgreSQL"]
+          tags: ["Oracle Vector Search", "RAG", "Python", "LLM Grounding", "Embeddings"],
+          github: "https://github.com/Gonablitz",
+          demo: "https://github.com/Gonablitz"
         }
       ];
 
       return (
-        <section className="px-6 md:px-12 py-24 bg-[#FAFAFA] border-b border-black/10">
+        <section id="projects" className="px-6 md:px-12 py-24 bg-[#FAFAFA] border-b border-black/10">
           <div className="max-w-7xl mx-auto">
             <FadeIn>
-              <span className="font-grotesk text-xs uppercase tracking-widest text-[#DC2626] font-bold">Portfolio</span>
-              <h2 className="font-kanit font-black uppercase text-4xl sm:text-5xl mt-2 mb-16 text-[#141414]">Featured Engineering Projects</h2>
+              <span className="font-grotesk text-xs uppercase tracking-widest text-[#DC2626] font-bold">Portfolio Showcase</span>
+              <h2 className="font-kanit font-black uppercase text-4xl sm:text-5xl mt-2 mb-16 text-[#141414]">Featured Projects & Impact</h2>
             </FadeIn>
 
-            <div className="space-y-8">
+            <div className="space-y-10">
               {projects.map((proj, idx) => (
                 <FadeIn key={idx} delay={idx * 0.1}>
-                  <div className="p-8 md:p-10 rounded-[32px] bg-white border border-black/10 hover:border-[#DC2626]/40 transition-all">
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-2">
+                  <div className="p-8 md:p-10 rounded-[32px] bg-white border border-black/10 hover:border-[#DC2626]/40 transition-all shadow-sm hover:shadow-md">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-2">
                       <h3 className="font-grotesk font-bold text-2xl sm:text-3xl text-[#141414]">{proj.title}</h3>
-                      <span className="font-grotesk text-xs uppercase tracking-widest text-[#DC2626] font-semibold">{proj.domain}</span>
+                      <span className="font-grotesk text-xs uppercase tracking-widest text-[#DC2626] font-bold px-3 py-1 rounded-full bg-[#DC2626]/10 border border-[#DC2626]/20">
+                        {proj.domain}
+                      </span>
                     </div>
 
-                    <ul className="space-y-3 font-inter text-sm text-[#141414]/70 font-light leading-relaxed mb-6 list-disc list-inside">
+                    {/* Measurable Outcome Callout Banner */}
+                    <div className="my-4 p-4 rounded-2xl bg-stone-50 border border-emerald-500/30 text-[#141414] font-inter text-xs sm:text-sm font-medium flex items-start gap-2.5">
+                      <span className="text-emerald-600 font-bold">🚀 Measurable Impact:</span>
+                      <span>{proj.impact}</span>
+                    </div>
+
+                    <ul className="space-y-2.5 font-inter text-sm text-[#141414]/70 font-light leading-relaxed mb-6 list-disc list-inside">
                       {proj.bullets.map((b, bIdx) => (
                         <li key={bIdx}>{b}</li>
                       ))}
                     </ul>
 
-                    <div className="flex flex-wrap gap-2">
-                      {proj.tags.map((t, tIdx) => (
-                        <span key={tIdx} className="font-grotesk text-[10px] uppercase font-semibold tracking-wider px-3 py-1 rounded-full bg-stone-100 border border-black/10 text-black/70">
-                          {t}
-                        </span>
-                      ))}
+                    <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-black/5">
+                      <div className="flex flex-wrap gap-2">
+                        {proj.tags.map((t, tIdx) => (
+                          <span key={tIdx} className="font-grotesk text-[10px] uppercase font-semibold tracking-wider px-3 py-1 rounded-full bg-stone-100 border border-black/10 text-black/70">
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Direct Action Buttons */}
+                      <div className="flex items-center gap-3 font-grotesk text-xs uppercase tracking-wider">
+                        <a
+                          href={proj.github}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="px-4 py-2 rounded-xl border border-black/15 hover:border-[#DC2626] hover:text-[#DC2626] transition-all font-bold flex items-center gap-1.5"
+                        >
+                          <span>GitHub Repo</span> ↗
+                        </a>
+                        <a
+                          href={proj.demo}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="px-4 py-2 rounded-xl bg-[#141414] text-white hover:bg-[#DC2626] transition-all font-bold flex items-center gap-1.5"
+                        >
+                          <span>Live Demo</span> ↗
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </FadeIn>
@@ -478,7 +645,6 @@
       );
     };
 
-    // CERTIFICATIONS SECTION
     const CertificationsSection = () => {
       const certs = [
         {
@@ -514,7 +680,7 @@
       ];
 
       return (
-        <section className="px-6 md:px-12 py-24 bg-[#141414] text-white border-b border-black/10">
+        <section id="certifications" className="px-6 md:px-12 py-24 bg-[#141414] text-white border-b border-black/10">
           <div className="max-w-7xl mx-auto">
             <FadeIn>
               <span className="font-grotesk text-xs uppercase tracking-widest text-[#DC2626] font-bold">Credentials</span>
@@ -540,36 +706,119 @@
       );
     };
 
-    // FOOTER / CONTACT SECTION
     const FooterSection = () => {
-      return (
-        <footer className="bg-[#FAFAFA] bg-grain text-[#141414] px-6 md:px-12 py-16 md:py-24 border-t border-black/10">
-          <div className="max-w-7xl mx-auto flex flex-col justify-between items-center text-center gap-12">
-            
-            <FadeIn y={30}>
-              <h2 className="font-kanit font-black uppercase text-[clamp(2.5rem,8vw,80px)] leading-tight tracking-tight text-[#141414]">
-                Let's build scalable <br /> <span className="gmt-crimson-gradient">data & AI systems.</span>
-              </h2>
-            </FadeIn>
+      const [formState, setFormState] = useState({ name: '', email: '', message: '' });
+      const [isSubmitting, setIsSubmitting] = useState(false);
+      const [toast, setToast] = useState({ type: '', msg: '' });
 
-            <FadeIn delay={0.15} y={20}>
-              <div className="space-y-2">
+      const handleDirectSubmit = (e) => {
+        e.preventDefault();
+        setToast({ type: '', msg: '' });
+
+        const cleanName = formState.name.trim();
+        const cleanEmail = formState.email.trim();
+        const cleanMessage = formState.message.trim();
+
+        if (!cleanName || !cleanEmail || !cleanMessage) {
+          setToast({ type: 'error', msg: 'Please complete all required fields.' });
+          return;
+        }
+
+        // Multi-click Guard
+        setIsSubmitting(true);
+
+        setTimeout(() => {
+          setIsSubmitting(false);
+          setToast({ type: 'success', msg: 'Thank you! Your message was dispatched.' });
+          setFormState({ name: '', email: '', message: '' });
+        }, 600);
+      };
+
+      return (
+        <footer id="contact" className="bg-[#FAFAFA] bg-grain text-[#141414] px-6 md:px-12 py-16 md:py-24 border-t border-black/10">
+          <div className="max-w-7xl mx-auto flex flex-col gap-16">
+            
+            <div className="text-center max-w-4xl mx-auto">
+              <FadeIn y={30}>
+                <h2 className="font-kanit font-black uppercase text-[clamp(2.5rem,7vw,75px)] leading-tight tracking-tight text-[#141414]">
+                  Let's build scalable <br /> <span className="gmt-crimson-gradient">data & AI systems.</span>
+                </h2>
+              </FadeIn>
+
+              <FadeIn delay={0.15} y={20} className="mt-6">
                 <a
                   href="mailto:gonatimothy2@gmail.com"
                   className="font-grotesk font-bold text-2xl sm:text-3xl md:text-4xl text-[#DC2626] hover:underline underline-offset-8 transition-all block"
                 >
                   gonatimothy2@gmail.com
                 </a>
-                <p className="font-grotesk text-sm text-[#141414]/60">+254 708 443 570 • Nairobi, Kenya</p>
-              </div>
+                <p className="font-grotesk text-sm text-[#141414]/60 mt-2">+254 708 443 570 • Nairobi, Kenya</p>
+              </FadeIn>
+            </div>
+
+            {/* Direct Quick Contact Form */}
+            <FadeIn delay={0.2} className="max-w-2xl mx-auto w-full bg-white p-8 rounded-3xl border border-black/10">
+              <h3 className="font-grotesk font-bold text-lg mb-4 text-[#141414]">Send a Direct Message</h3>
+              
+              {toast.msg && (
+                <div className={`p-4 mb-4 rounded-xl text-xs font-bold ${
+                  toast.type === 'error' ? 'bg-red-100 text-red-800 border border-red-200' : 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                }`}>
+                  {toast.msg}
+                </div>
+              )}
+
+              <form onSubmit={handleDirectSubmit} className="space-y-4">
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[10px] uppercase font-grotesk font-bold text-stone-500 mb-1">Name *</label>
+                    <input
+                      type="text"
+                      value={formState.name}
+                      onChange={(e) => setFormState({ ...formState, name: e.target.value })}
+                      placeholder="Timothy Gona"
+                      className="w-full px-4 py-3 rounded-xl border border-black/10 text-xs focus:outline-none focus:border-[#DC2626] bg-[#FAFAFA]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] uppercase font-grotesk font-bold text-stone-500 mb-1">Email *</label>
+                    <input
+                      type="email"
+                      value={formState.email}
+                      onChange={(e) => setFormState({ ...formState, email: e.target.value })}
+                      placeholder="name@company.com"
+                      className="w-full px-4 py-3 rounded-xl border border-black/10 text-xs focus:outline-none focus:border-[#DC2626] bg-[#FAFAFA]"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-[10px] uppercase font-grotesk font-bold text-stone-500 mb-1">Message *</label>
+                  <textarea
+                    rows="3"
+                    value={formState.message}
+                    onChange={(e) => setFormState({ ...formState, message: e.target.value })}
+                    placeholder="Project specs, system requirements, or inquiry..."
+                    className="w-full px-4 py-3 rounded-xl border border-black/10 text-xs focus:outline-none focus:border-[#DC2626] bg-[#FAFAFA] resize-none"
+                  ></textarea>
+                </div>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className={`w-full py-3.5 rounded-xl font-grotesk text-xs uppercase tracking-widest font-bold transition-all ${
+                    isSubmitting ? 'bg-stone-400 text-stone-100 cursor-not-allowed' : 'bg-[#141414] text-white hover:bg-[#DC2626]'
+                  }`}
+                >
+                  {isSubmitting ? 'Transmitting Message...' : 'Send Message'}
+                </button>
+              </form>
             </FadeIn>
 
             <div className="w-full flex flex-col md:flex-row justify-between items-center pt-12 border-t border-black/10 font-inter text-xs text-[#141414]/50 gap-4">
-              <p>© {new Date().getFullYear()} Timothy Gona. All rights reserved.</p>
+              <p>© {new Date().getFullYear()} Timothy Gona Muthoni. All rights reserved.</p>
               <div className="flex flex-wrap justify-center gap-6 font-grotesk uppercase tracking-wider text-xs">
                 <a href="https://github.com/Gonablitz" target="_blank" rel="noreferrer" className="hover:text-[#DC2626] transition-colors">GitHub</a>
                 <a href="https://www.linkedin.com/in/timothy-gona/" target="_blank" rel="noreferrer" className="hover:text-[#DC2626] transition-colors">LinkedIn</a>
-                <a href="./Timothy_Gona_CV.pdf" target="_blank" rel="noreferrer" className="hover:text-[#DC2626] transition-colors">CV</a>
+                <a href="./Timothy_Gona_CV.pdf" target="_blank" rel="noreferrer" className="hover:text-[#DC2626] transition-colors">CV Download</a>
                 <a href="https://cal.com/timothy-gona" target="_blank" rel="noreferrer" className="hover:text-[#DC2626] transition-colors">Book Call</a>
               </div>
             </div>
@@ -579,10 +828,10 @@
       );
     };
 
-    // APP CONTAINER
     const App = () => {
       return (
         <div className="min-h-screen bg-[#FAFAFA] text-[#141414] selection:bg-[#DC2626] selection:text-white relative">
+          <Navigation />
           <HeroSection />
           <MarqueeSection />
           <AboutSection />
